@@ -20,7 +20,7 @@
         <thead>
             <tr style="text-align:center">
                 <th>#</th>
-                <th>Tên tour du lịch</th>
+                <th style="width:500px;">Tên tour du lịch</th>
                 <th>Giá</th>
                 <th>Thời gian</th>
                 <th>Danh mục</th>

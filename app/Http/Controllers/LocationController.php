@@ -36,4 +36,10 @@ class LocationController extends Controller
 
         return redirect()->route('admin.locations.index')->with('success', 'Địa điểm đã được tạo thành công!');
     }
+
+    public function getLocations()
+    {
+        $locations = Location::all(); // Lấy tất cả dữ liệu từ bảng locations
+        return view('welcome', compact('locations'));
+    }
 }

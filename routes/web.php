@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::get('/', function () {
-//     return view('user.layout');
+//     return view('user.homepage');
 // });
 
 // Route Admin
@@ -28,6 +28,7 @@ Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin
 
 // Tour Management
 use App\Http\Controllers\TourController;
+use App\Http\Controllers\UserController;
 
 Route::get('/admin/tour_management/index', [TourController::class, 'index'])->name('admin.tour_management.index');
 Route::get('/admin/tour_management/create', [TourController::class, 'create'])->name('admin.tour_management.create');
@@ -37,13 +38,16 @@ Route::delete('/tours/{tour}', [TourController::class, 'destroy'])->name('admin.
 Route::get('admin/tours/{tour}/edit', [TourController::class, 'edit'])->name('admin.tour_management.edit');
 Route::put('admin/tours/{tour}', [TourController::class, 'update'])->name('admin.tour_management.update');
 
-
 // Category Route
 use App\Http\Controllers\CategoryController;
 
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index'); // Danh sách danh mục
 Route::get('/admin/categories/create', [CategoryController::class, 'create'])->name('admin.categories.create'); // Form thêm danh mục
 Route::post('/admin/categories', [CategoryController::class, 'store'])->name('admin.categories.store'); // Xử lý lưu danh mục
+Route::get('/admin/categories/{category}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit'); // Form sửa danh mục
+Route::get('admin/categories/{category}',[CategoryController::class, 'show'])->name('admin.categories.show'); // Xem chi tiết danh mục
+Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update'); // Xử lý sửa danh mục
+Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy'); // Xử lý xóa danh mục
 
 
 // Location Route
@@ -58,3 +62,22 @@ use App\Http\Controllers\AdminAccountController;
 Route::get('/admin/account_admin/index', [AdminAccountController::class, 'index'])->name(('admin.account_admin.index'));
 Route::get('/admin/account_admin/create', [AdminAccountController::class, 'create'])->name('admin.account_admin.create');
 Route::delete('/admin/account_admin/{admin}', [AdminAccountController::class, 'destroy'])->name('admin.account_admin.destroy');
+
+
+// Route trên trang user
+use App\Models\Location;
+use App\Models\Tour;
+use App\Models\Category;
+Route::get('/', function () {
+    $locations = Location::all(); // Lấy toàn bộ dữ liệu từ bảng locations
+    // $tours = Tour::with(['category', 'location'])->get();
+    $categories = Category::with('tours')->get();
+    return view('user.homepage', compact('locations', 'categories'));
+});
+
+Route::get('/{category}', function (Category $category)
+{
+    $categories = Category::where('id', $category->id)->get();
+    $tours = Tour::where('category_id', $category->id)->get();
+    return view('user.category_tour', compact('categories', 'tours', 'category'));
+})->name('user.category_tour');

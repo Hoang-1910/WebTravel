@@ -25,7 +25,7 @@
             </ul>
         </div>
     </header>
-    <div class="container mt-3" style="max-height:690px; overflow:scroll"">
+    <div class="container mt-3" style="max-height:715px; overflow:scroll"">
         <div class="container d-flex justify-content-between">
             <h2>Chào mừng, {{ session('admin')->name }}!</h2>
             <a href="{{ route('admin.logout') }}" class="btn btn-danger">Đăng xuất</a>

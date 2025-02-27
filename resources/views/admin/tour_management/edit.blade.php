@@ -62,12 +62,25 @@
 
                 <div class="mb-3">
                     <label class="form-label">Hình ảnh</label>
-                    <input type="file" name="image" class="form-control" multiple>
+                    <input type="file" name="image" class="form-control">
                     @if ($tour->image)
                         <img src="{{ asset('storage/' . $tour->image) }}" alt="Ảnh tour" class="img-fluid mt-2" width="200">
                     @endif
+                </div>                
+                <div class="mb-3">
+                    <label for="" class="form-label">Hình ảnh phụ</label>
+                    <input type="file" name="images[]" class="form-control" multiple>
+                    @if ($tourImages->isNotEmpty())
+                        @foreach ($tourImages as $image)
+                            <div class="d-flex">
+                                <img class="img-fluid mt-2" width="200" src="{{ asset('storage/' . $image->image) }}">
+                            </div>
+                        @endforeach
+                    @else
+                        <span>Chưa có ảnh</span>
+                    @endif
                 </div>
-
+                <!-- Hiển thị ảnh phụ -->
                 <div class="mb-3">
                     <button type="submit" class="btn btn-success">Cập nhật</button>
                     <a href="{{ route('admin.tour_management.index') }}" class="btn btn-secondary">Quay lại</a>

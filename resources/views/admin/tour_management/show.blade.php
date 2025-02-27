@@ -19,13 +19,37 @@
                     {{ $tour->status == 'active' ? 'Hoạt động' : 'Ngừng hoạt động' }}
                 </span>
             </p>
+            <div id="carouselExample" class="carousel slide">
+                <div class="carousel-inner">
+                    @if($tour->image)
+                        <div class="carousel-item active">
+                            <img class="d-block w-100" src="{{ asset('storage/' . $tour->image) }}">
+                        </div>
+                    @else
+                        <span>Chưa có ảnh</span>
+                    @endif
+
+                    @if ($tourImages->count() > 0)
+                        @foreach ($tourImages as $image)
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="{{ asset('storage/' . $image->image) }}">
+                            </div>
+                        @endforeach
+                    @else
+                        <span>Chưa có ảnh</span>
+                    @endif
+                    
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+            </div>
             
-            @if($tour->image)
-                <p><strong>Hình ảnh:</strong></p>
-                <img src="{{ asset('storage/' . $tour->image) }}" >
-            @else
-                <span>Chưa có ảnh</span>
-            @endif
         </div>
         <div class="card-footer">
             <a href="{{ route('admin.tour_management.index') }}" class="btn btn-secondary">Quay lại</a>

@@ -16,14 +16,24 @@
                 <th>ID</th>
                 <th>Tên Danh Mục</th>
                 <th>Mô Tả</th>
+                <th>Thao tác</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($categories as $category)
+            @foreach ($categories as $index => $category)
                 <tr>
-                    <td>{{ $category->id }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $category->name }}</td>
                     <td>{{ $category->description }}</td>
+                    <td>
+                        <a href="{{ route('admin.categories.show', ['category' => $category->id]) }}" class="btn btn-primary">Xem chi tiết</a>
+                        <a href="{{ route('admin.categories.edit', ['category' => $category->id]) }}" class="btn btn-warning">Sửa</a>
+                        <form action="{{ route('admin.categories.destroy', ['category' => $category->id]) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?')">Xóa</button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
