@@ -19,10 +19,11 @@ class TourController extends Controller
     }
     public function showDetail($tour, Category $category)
     {
-        $tour = Tour::findOrFail($tour); // Tìm tour theo ID
-        $categories = Category::where('id', $category->id)->get();
+        $tour = Tour::with(['images', 'schedules'])->findOrFail($tour); // Lấy tour + ảnh + lịch trình
+        $categories = Category::findOrFail($category); // Lấy danh mục theo ID
         $tourImages = $tour->images; // Lấy danh sách ảnh liên quan
-        return view('user.detail_tour', compact('tour', 'categories', 'tourImages'));
+        $schedules = $tour->schedules; // Lấy lịch trình của tour
+        return view('user.detail_tour', compact('tour', 'tourImages', 'categories', 'schedules'));
     }
     public function create()
     {

@@ -67,6 +67,15 @@ Route::delete('/admin/account_admin/{admin}', [AdminAccountController::class, 'd
 Route::get('/admin/account_user/index', [UserController::class, 'index'])->name('admin.account_user.index');
 
 
+// Route Scheule
+use App\Http\Controllers\ScheduleController;
+Route::get('admin/tours/{tour}/schedules', [ScheduleController::class, 'index'])->name('admin.schedules.index');
+Route::get('admin/tours/{tour}/schedules/create', [ScheduleController::class, 'create'])->name('admin.schedules.create');
+Route::post('admin/tours/{tour}/schedules', [ScheduleController::class, 'store'])->name('admin.schedules.store');
+Route::get('admin/tours/{tour}/schedules/{schedule}/edit', [ScheduleController::class, 'edit'])->name('admin.schedules.edit');
+Route::put('admin/tours/{tour}/schedules/{schedule}', [ScheduleController::class, 'update'])->name('admin.schedules.update');
+Route::delete('admin/tours/{tour}/schedules/{schedule}', [ScheduleController::class, 'destroy'])->name('admin.schedules.destroy');
+
 // Route trên trang user
 use App\Models\Location;
 use App\Models\Tour;

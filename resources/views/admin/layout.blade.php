@@ -20,7 +20,6 @@
                 <li class="header-item"><a href="{{ route('admin.account_user.index') }}" class="header-link">Quản lý người dùng</a></li>
                 <li class="header-item"><a href="" class="header-link">Quản lý đánh giá</a></li>
                 <li class="header-item"><a href="" class="header-link">Quản lý khách sạn</a></li>
-                <li class="header-item"><a href="" class="header-link">Quản lý lịch trình</a></li>
                 <li class="header-item"><a href="{{ route('admin.account_admin.index') }}" class="header-link">Quản lý tài khoản admin</a></li>
             </ul>
         </div>
