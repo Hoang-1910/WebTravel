@@ -59,7 +59,10 @@
                         <option value="inactive" {{ $tour->status == 'inactive' ? 'selected' : '' }}>Ngừng hoạt động</option>
                     </select>
                 </div>
-
+                <div class="mb-3">
+                    <label for="max_people">Số người tối đa:</label>
+                    <input type="number" name="max_people" class="form-control" value="{{ old('max_people', $tour->max_people) }}" min="1">
+                </div>
                 <div class="mb-3">
                     <label class="form-label">Hình ảnh</label>
                     <input type="file" name="image" class="form-control">

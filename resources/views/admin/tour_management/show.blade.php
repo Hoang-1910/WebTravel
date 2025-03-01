@@ -14,6 +14,7 @@
             <p><strong>Thời gian:</strong> {{ $tour->duration }} ngày</p>
             <p><strong>Danh mục:</strong> {{ $tour->category->name }}</p>
             <p><strong>Địa điểm:</strong> {{ $tour->location->name }}</p>
+            <p><strong>Số người tối đa:</strong> {{ $tour->max_people }}</p>
             <p><strong>Trạng thái:</strong> 
                 <span class="badge {{ $tour->status == 'active' ? 'bg-success' : 'bg-danger' }}">
                     {{ $tour->status == 'active' ? 'Hoạt động' : 'Ngừng hoạt động' }}

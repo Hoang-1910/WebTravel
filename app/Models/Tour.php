@@ -17,6 +17,7 @@ class Tour extends Model
         'location_id',
         'image',
         'status',
+        'max_people', // Thêm trường này
     ];
 
     public function category()

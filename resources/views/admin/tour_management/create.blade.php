@@ -42,6 +42,10 @@
                 @endforeach
             </select>
         </div>
+        <div class="mb-3">
+            <label for="max_people" class="form-label">Số người tối đa:</label>
+            <input type="number" name="max_people" class="form-control" value="{{ old('max_people', $tour->max_people ?? '') }}" min="1">
+        </div>
 
         <div class="mb-3">
             <label class="form-label">Hình Ảnh Đại Diện</label>

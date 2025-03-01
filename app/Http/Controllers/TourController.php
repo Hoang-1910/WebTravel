@@ -17,6 +17,13 @@ class TourController extends Controller
         $tours = Tour::with(['category', 'location'])->get();
         return view('admin.tour_management.index', compact('tours'));
     }
+    public function showDetail($tour, Category $category)
+    {
+        $tour = Tour::findOrFail($tour); // Tìm tour theo ID
+        $categories = Category::where('id', $category->id)->get();
+        $tourImages = $tour->images; // Lấy danh sách ảnh liên quan
+        return view('user.detail_tour', compact('tour', 'categories', 'tourImages'));
+    }
     public function create()
     {
         $categories = Category::all();
@@ -35,6 +42,7 @@ class TourController extends Controller
             'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'status' => 'required|in:active,inactive',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'max_people' => 'required|integer|min:1'
         ]);
 
         // Tạo tour mới
@@ -78,7 +86,8 @@ class TourController extends Controller
             'location_id' => 'required|exists:locations,id',
             'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'status' => 'required|in:active,inactive',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'max_people' => 'required|integer|min:1'
         ]);
 
         $tour->update($validatedData);
