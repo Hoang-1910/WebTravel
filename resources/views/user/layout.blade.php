@@ -27,12 +27,23 @@
                 <a href="#"><i class="fas fa-store"></i> Hệ thống giao dịch</a>
                 <a href="#"><i class="fas fa-user-plus"></i> Đăng ký đại lý</a>
                 <a href="#"><i class="fas fa-comment"></i> Phiếu góp ý</a>
-                <button class="btn text-white" data-bs-target="#loginModal" data-bs-toggle="modal">
-                    <i class="fas fa-sign-in-alt"></i> Đăng nhập
-                </button>
-                <button class="btn text-white" data-bs-toggle="modal" data-bs-target="#registerModal">
-                    <i class="fas fa-user-plus"></i> Đăng ký
-                </button>
+                @if(Auth::check())
+                    <span class="text-white ps-3"><i class="fas fa-user"></i> Xin chào, {{ Auth::user()->name }}</span>
+                    <form id="logout-form" action="{{ route('user.logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                
+                    <a href="#" class="btn text-white ms-2 pt-0" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </a>
+                @else
+                    <button class="btn text-white" data-bs-target="#loginModal" data-bs-toggle="modal">
+                        <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                    </button>
+                    <button class="btn text-white" data-bs-toggle="modal" data-bs-target="#registerModal">
+                        <i class="fas fa-user-plus"></i> Đăng ký
+                    </button>
+                @endif
             </div>
         </div>
     </div>
@@ -144,21 +155,47 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email:</label>
-                            <input type="email" class="form-control" id="email" placeholder="Nhập email của bạn" required>
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
                         </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('user.login') }}">
+                        @csrf
+
                         <div class="mb-3">
-                            <label for="password" class="form-label">Mật khẩu:</label>
-                            <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu" required>
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" 
+                                   class="form-control @error('email') is-invalid @enderror"
+                                   value="{{ old('email') }}" required autofocus>
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mật khẩu</label>
+                            <input type="password" id="password" name="password" 
+                                   class="form-control @error('password') is-invalid @enderror" required>
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="rememberMe">
-                            <label class="form-check-label" for="rememberMe">Nhớ mật khẩu</label>
+                            <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                            <label class="form-check-label" for="remember">Ghi nhớ đăng nhập</label>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                        </div>
                     </form>
+
+                    <div class="text-center mt-3">
+                        {{-- <a href="{{ route('user.register') }}">Chưa có tài khoản? Đăng ký ngay</a> --}}
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <a href="#" class="text-decoration-none">Quên mật khẩu?</a>
@@ -176,20 +213,28 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="registerForm" action="{{ route('user.register') }}" method="POST">
+                        @csrf
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email:</label>
-                            <input type="email" class="form-control" id="email" placeholder="Nhập email của bạn" required>
+                            <label for="name" class="form-label">Tên</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                            <span class="text-danger error-name"></span>
                         </div>
                         <div class="mb-3">
-                            <label for="password" class="form-label">Mật khẩu:</label>
-                            <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu" required>
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                            <span class="text-danger error-email"></span>
                         </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="rememberMe">
-                            <label class="form-check-label" for="rememberMe">Nhớ mật khẩu</label>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mật khẩu</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <span class="text-danger error-password"></span>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+                        <div class="mb-3">
+                            <label for="password_confirmation" class="form-label">Nhập lại mật khẩu</label>
+                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -199,7 +244,42 @@
         </div>
     </div>
 
+    <script>
+        $(document).ready(function() {
+            $('#registerForm').on('submit', function(e) {
+                e.preventDefault();
 
+                $('.text-danger').text('');
+                $('#register-alert').removeClass('alert-success alert-danger').addClass('d-none');
+
+                $.ajax({
+                    url: "{{ route('user.register') }}",
+                    type: "POST",
+                    data: $(this).serialize(),
+                    beforeSend: function() {
+                        console.log("Sending request...");
+                    },
+                    success: function(response) {
+                        console.log("Response received:", response);
+                        $('#register-alert').text(response.success).addClass('alert-success').removeClass('d-none');
+                        $('#registerForm')[0].reset();
+                        setTimeout(() => $('#registerModal').modal('hide'), 2000);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", xhr);
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            if (errors.name) $('.error-name').text(errors.name[0]);
+                            if (errors.email) $('.error-email').text(errors.email[0]);
+                            if (errors.password) $('.error-password').text(errors.password[0]);
+                        } else {
+                            $('#register-alert').text("Có lỗi xảy ra!").addClass('alert-danger').removeClass('d-none');
+                        }
+                    }
+                });
+            });
+        });
+        </script>
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

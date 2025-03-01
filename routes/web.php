@@ -63,6 +63,9 @@ Route::get('/admin/account_admin/index', [AdminAccountController::class, 'index'
 Route::get('/admin/account_admin/create', [AdminAccountController::class, 'create'])->name('admin.account_admin.create');
 Route::delete('/admin/account_admin/{admin}', [AdminAccountController::class, 'destroy'])->name('admin.account_admin.destroy');
 
+// Route Account User
+Route::get('/admin/account_user/index', [UserController::class, 'index'])->name('admin.account_user.index');
+
 
 // Route trên trang user
 use App\Models\Location;
@@ -81,3 +84,8 @@ Route::get('/{category}', function (Category $category)
     $tours = Tour::where('category_id', $category->id)->get();
     return view('user.category_tour', compact('categories', 'tours', 'category'));
 })->name('user.category_tour');
+
+Route::post('/login', [UserController::class, 'login'])->name('user.login');
+Route::post('/register', [UserController::class, 'register'])->name('user.register');
+Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');
+Route::get('/tour/{tour}', [TourController::class, 'showDetail'])->name('user.detail_tour');

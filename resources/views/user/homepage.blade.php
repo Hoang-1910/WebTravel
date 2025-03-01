@@ -109,7 +109,7 @@
                                         <span><i class="far fa-clock"></i>{{ $tour->duration }} ngày</span>
                                         <span><i class="fas fa-map-marker-alt"></i>{{ $tour->location ? $tour->location->name : 'Không xác định'  }}</span>
                                     </div>
-                                    <a href="" class="btn-secondary">Xem chi tiết</a>
+                                    <a href="{{ route('user.detail_tour',  ['tour' => $tour->id]) }}" class="btn-secondary">Xem chi tiết</a>
                                 </div>
                             </div>
                         @endforeach
