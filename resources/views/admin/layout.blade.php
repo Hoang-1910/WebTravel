@@ -16,7 +16,7 @@
                 <li class="header-item"><a href="{{ route('admin.tour_management.index') }}" class="header-link">Quản lý Tour</a></li>
                 <li class="header-item"><a href="{{ route('admin.categories.index') }}" class="header-link">Quản lý Category</a></li>
                 <li class="header-item"><a href="{{ route('admin.locations.index') }}" class="header-link">Quản lý Location</a></li>
-                <li class="header-item"><a href="" class="header-link">Quản lý đặt Tour</a></li>
+                <li class="header-item"><a href="{{ route('admin.bookings.index') }}" class="header-link">Quản lý đặt Tour</a></li>
                 <li class="header-item"><a href="{{ route('admin.account_user.index') }}" class="header-link">Quản lý người dùng</a></li>
                 <li class="header-item"><a href="" class="header-link">Quản lý đánh giá</a></li>
                 <li class="header-item"><a href="" class="header-link">Quản lý khách sạn</a></li>

@@ -57,13 +57,6 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">
-                                <i class="far fa-calendar-alt"></i>
-                                Ngày đi
-                            </label>
-                            <input type="date" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">
                                 <i class="fas fa-users"></i>
                                 Số người
                             </label>
@@ -109,7 +102,7 @@
                                         <span><i class="far fa-clock"></i>{{ $tour->duration }} ngày</span>
                                         <span><i class="fas fa-map-marker-alt"></i>{{ $tour->location ? $tour->location->name : 'Không xác định'  }}</span>
                                     </div>
-                                    <a href="{{ route('user.detail_tour',  ['tour' => $tour->id]) }}" class="btn-secondary">Xem chi tiết</a>
+                                    <a href="{{ route('user.detail_tour',  ['id' => $tour->id]) }}" class="btn-secondary">Xem chi tiết</a>
                                 </div>
                             </div>
                         @endforeach

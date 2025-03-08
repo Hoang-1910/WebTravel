@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Tour;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
@@ -10,16 +11,29 @@ class ScheduleController extends Controller
     // Hiển thị danh sách lịch trình của một tour
     public function index($tourId)
     {
-        $tour = Tour::with('schedules')->findOrFail($tourId);
+        $tour = Tour::with('schedules')->withCount('schedules')->findOrFail($tourId);
         return view('admin.schedules.index', compact('tour'));
     }
 
+
     // Hiển thị form thêm lịch trình mới
     public function create($tourId)
-    {
-        $tour = Tour::findOrFail($tourId);
-        return view('admin.schedules.create', compact('tour'));
+{
+    $tour = Tour::with('schedules')->findOrFail($tourId);
+    $existingDays = $tour->schedules->pluck('day_number')->toArray(); // Lấy danh sách ngày đã có
+    $nextDay = 1;
+
+    // Tìm số ngày tiếp theo chưa được sử dụng
+    for ($i = 1; $i <= $tour->duration; $i++) {
+        if (!in_array($i, $existingDays)) {
+            $nextDay = $i;
+            break;
+        }
     }
+
+    return view('admin.schedules.create', compact('tour', 'nextDay'));
+}
+
 
     // Lưu lịch trình mới vào database
     public function store(Request $request, $tourId)
@@ -53,7 +67,7 @@ class ScheduleController extends Controller
         $schedule->update($validated);
 
         return redirect()->route('admin.schedules.index', $tourId)
-                         ->with('success', 'Lịch trình đã được cập nhật!');
+            ->with('success', 'Lịch trình đã được cập nhật!');
     }
 
     // Xóa lịch trình
@@ -61,6 +75,6 @@ class ScheduleController extends Controller
     {
         $schedule->delete();
         return redirect()->route('admin.schedules.index', $tourId)
-                         ->with('success', 'Lịch trình đã bị xóa!');
+            ->with('success', 'Lịch trình đã bị xóa!');
     }
 }

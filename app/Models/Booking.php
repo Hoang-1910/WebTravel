@@ -9,30 +9,27 @@ class Booking extends Model
 {
     use HasFactory;
 
-    protected $table = 'bookings';
+    protected $table = 'bookings'; // Tên bảng trong database
 
     protected $fillable = [
         'user_id',
         'tour_id',
-        'booking_date',
-        'travel_date',
+        'departure_location',
+        'departure_date',
         'num_people',
         'total_price',
-        'status',
+        'status'
     ];
 
-    protected $casts = [
-        'booking_date' => 'datetime',
-        'travel_date' => 'date',
-    ];
+    protected $dates = ['travel_date', 'departure_date'];
 
-    // Quan hệ với bảng users
+    // Quan hệ với User
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Quan hệ với bảng tours
+    // Quan hệ với Tour
     public function tour()
     {
         return $this->belongsTo(Tour::class);

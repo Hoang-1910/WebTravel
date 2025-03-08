@@ -17,36 +17,31 @@
 </head>
 <body>
     <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="container">
+    <div class="top-bar text-white py-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <!-- Thông tin liên hệ -->
             <div class="top-contact">
                 <span><i class="fas fa-envelope"></i> mien@dulichVietNam</span>
-                <span><i class="fas fa-phone"></i> 0973.645.609</span>
+                <span class="ms-3"><i class="fas fa-phone"></i> 0973.645.609</span>
             </div>
-            <div class="top-links">
-                <a href="#"><i class="fas fa-store"></i> Hệ thống giao dịch</a>
-                <a href="#"><i class="fas fa-user-plus"></i> Đăng ký đại lý</a>
-                <a href="#"><i class="fas fa-comment"></i> Phiếu góp ý</a>
-                @if(Auth::check())
-                    <span class="text-white ps-3"><i class="fas fa-user"></i> Xin chào, {{ Auth::user()->name }}</span>
-                    <form id="logout-form" action="{{ route('user.logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                
-                    <a href="#" class="btn text-white ms-2 pt-0" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                    </a>
+    
+            <!-- Liên kết -->
+            <div class="top-links d-flex align-items-center">
+                <a href="#" class="text-white me-3"><i class="fas fa-store"></i> Hệ thống giao dịch</a>
+                <a href="#" class="text-white me-3"><i class="fas fa-user-plus"></i> Đăng ký đại lý</a>
+                <a href="#" class="text-white me-3"><i class="fas fa-comment"></i> Phiếu góp ý</a>
+    
+                @auth
+                    <span class="text-white me-3"><i class="fas fa-user"></i> Xin chào, {{ Auth::user()->name }}</span>
+                    <a class="text-white" href="{{ route('user.logout') }}"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
                 @else
-                    <button class="btn text-white" data-bs-target="#loginModal" data-bs-toggle="modal">
-                        <i class="fas fa-sign-in-alt"></i> Đăng nhập
-                    </button>
-                    <button class="btn text-white" data-bs-toggle="modal" data-bs-target="#registerModal">
-                        <i class="fas fa-user-plus"></i> Đăng ký
-                    </button>
-                @endif
+                    <a href="#" class="text-white me-3" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="fas fa-sign-in-alt"></i> Đăng Nhập</a>
+                    <a href="#" class="text-white" data-bs-toggle="modal" data-bs-target="#registerModal"><i class="fas fa-user-plus"></i> Đăng Ký</a>
+                @endauth
             </div>
         </div>
     </div>
+    
 
 
 
@@ -65,7 +60,9 @@
                         <a href="#tour">Du lịch <i class="fas fa-chevron-down"></i></a>
                         <ul class="dropdown-content p-0">
                             @foreach($categories as $category)
-                                <li><a href="#">{{ $category->name }}</a></li>
+                                <li class="nav-item">
+                                    <a class="nav-link"" href="{{ route('user.category_tour', ['category' => $category->id]) }}">{{ $category->name }}</a>
+                                </li>
                             @endforeach
                         </ul>
                     </li>
@@ -281,6 +278,7 @@
         });
         </script>
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>

@@ -1,7 +1,20 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\TourController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\AdminAccountController;
+use App\Http\Controllers\ScheduleController;
+use App\Models\Location;
+use App\Models\Tour;
+use App\Models\Category;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,7 +31,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 // Route Admin
-use App\Http\Controllers\AdminAuthController;
+
 
 Route::get('/admin/', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
@@ -27,8 +40,7 @@ Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin
 
 
 // Tour Management
-use App\Http\Controllers\TourController;
-use App\Http\Controllers\UserController;
+
 
 Route::get('/admin/tour_management/index', [TourController::class, 'index'])->name('admin.tour_management.index');
 Route::get('/admin/tour_management/create', [TourController::class, 'create'])->name('admin.tour_management.create');
@@ -39,7 +51,6 @@ Route::get('admin/tours/{tour}/edit', [TourController::class, 'edit'])->name('ad
 Route::put('admin/tours/{tour}', [TourController::class, 'update'])->name('admin.tour_management.update');
 
 // Category Route
-use App\Http\Controllers\CategoryController;
 
 Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index'); // Danh sách danh mục
 Route::get('/admin/categories/create', [CategoryController::class, 'create'])->name('admin.categories.create'); // Form thêm danh mục
@@ -51,24 +62,26 @@ Route::delete('/admin/categories/{category}', [CategoryController::class, 'destr
 
 
 // Location Route
-use App\Http\Controllers\LocationController;
 
 Route::get('/admin/locations', [LocationController::class, 'index'])->name('admin.locations.index'); // Danh sách địa điểm
 Route::get('/admin/locations/create', [LocationController::class, 'create'])->name('admin.locations.create'); // Form thêm địa điểm
 Route::post('/admin/locations', [LocationController::class, 'store'])->name('admin.locations.store'); // Xử lý lưu địa điểm
 
 //Route Account Amin
-use App\Http\Controllers\AdminAccountController;
 Route::get('/admin/account_admin/index', [AdminAccountController::class, 'index'])->name(('admin.account_admin.index'));
 Route::get('/admin/account_admin/create', [AdminAccountController::class, 'create'])->name('admin.account_admin.create');
 Route::delete('/admin/account_admin/{admin}', [AdminAccountController::class, 'destroy'])->name('admin.account_admin.destroy');
 
 // Route Account User
 Route::get('/admin/account_user/index', [UserController::class, 'index'])->name('admin.account_user.index');
-
+Route::get('/admin/account_user/create', [UserController::class, 'create'])->name('admin.account_user.create');
+Route::post('/admin/account_user/store', [UserController::class, 'store'])->name('admin.account_user.store');
+Route::delete('/admin/account_user/{user}', [UserController::class, 'destroy'])->name('admin.account_user.destroy');
+Route::get('/admin/account_user/{user}/edit', [UserController::class, 'edit'])->name('admin.account_user.edit');
+Route::put('/admin/account_user/{user}', [UserController::class, 'update'])->name('admin.account_user.update');
+Route::get('/admin/account_user/{user}', [UserController::class, 'show'])->name('admin.account_user.show');
 
 // Route Scheule
-use App\Http\Controllers\ScheduleController;
 Route::get('admin/tours/{tour}/schedules', [ScheduleController::class, 'index'])->name('admin.schedules.index');
 Route::get('admin/tours/{tour}/schedules/create', [ScheduleController::class, 'create'])->name('admin.schedules.create');
 Route::post('admin/tours/{tour}/schedules', [ScheduleController::class, 'store'])->name('admin.schedules.store');
@@ -76,25 +89,58 @@ Route::get('admin/tours/{tour}/schedules/{schedule}/edit', [ScheduleController::
 Route::put('admin/tours/{tour}/schedules/{schedule}', [ScheduleController::class, 'update'])->name('admin.schedules.update');
 Route::delete('admin/tours/{tour}/schedules/{schedule}', [ScheduleController::class, 'destroy'])->name('admin.schedules.destroy');
 
-// Route trên trang user
-use App\Models\Location;
-use App\Models\Tour;
-use App\Models\Category;
-Route::get('/', function () {
-    $locations = Location::all(); // Lấy toàn bộ dữ liệu từ bảng locations
-    // $tours = Tour::with(['category', 'location'])->get();
-    $categories = Category::with('tours')->get();
-    return view('user.homepage', compact('locations', 'categories'));
-});
+// Route Booking
+Route::get('admin/bookings', [BookingController::class, 'index'])->name('admin.bookings.index');
 
-Route::get('/{category}', function (Category $category)
-{
-    $categories = Category::where('id', $category->id)->get();
-    $tours = Tour::where('category_id', $category->id)->get();
-    return view('user.category_tour', compact('categories', 'tours', 'category'));
+// Route trên trang user
+
+// Chia sẻ dữ liệu categories và locations cho navbar
+view()->share([
+    'categories' => Category::all(),
+    'locations' => Location::all()
+]);
+
+// Trang chủ (hiển thị danh sách danh mục và địa điểm)
+Route::get('/', function () {
+    return view('user.homepage');
+})->name('user.homepage');
+
+// Hiển thị danh sách tour theo danh mục
+Route::get('/category/{category}', function (Category $category) {
+    return view('user.category_tour', [
+        'category' => $category,
+        'tours' => $category->tours
+    ]);
 })->name('user.category_tour');
 
-Route::post('/login', [UserController::class, 'login'])->name('user.login');
-Route::post('/register', [UserController::class, 'register'])->name('user.register');
-Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');
-Route::get('/tour/{tour}', [TourController::class, 'showDetail'])->name('user.detail_tour');
+// Chi tiết tour
+Route::get('/tour/{id}', [TourController::class, 'showInUser'])->name('user.detail_tour');
+
+// Xử lý đăng nhập
+Route::post('/login', function (Request $request) {
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::attempt($credentials)) {
+        return redirect('/')->with('success', 'Đăng nhập thành công!');
+    }
+
+    return back()->withErrors(['error' => 'Email hoặc mật khẩu không đúng!']);
+})->name('user.login');
+
+// Xử lý đăng ký
+Route::post('/register', function (Request $request) {
+    $user = User::create($request->only(['name', 'email', 'password']));
+    Auth::login($user);
+
+    return redirect('/')->with('success', 'Đăng ký thành công!');
+})->name('user.register');
+
+// Đăng xuất
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect('/')->with('success', 'Đăng xuất thành công!');
+})->name('user.logout');
+
+
+Route::get('/book-tour/{tour}', [BookingController::class, 'showBookingForm'])->name('booking.order');
+Route::post('/book-tour/{tour}', [BookingController::class, 'store'])->name('bookings.store');

@@ -132,6 +132,16 @@ class TourController extends Controller
         return view('admin.tour_management.show', compact('tour', 'tourImages'));
     }
 
+    public function showInUser($id){
+        // Lấy thông tin tour theo ID
+        $tour = Tour::with(['location', 'schedules'])->findOrFail($id);
+
+        // Lấy hình ảnh liên quan đến tour
+        $tourImages = TourImage::where('tour_id', $id)->get();
+
+        // Trả về view chi tiết tour
+        return view('user.detail_tour', compact('tour', 'tourImages')); 
+    }
 
 
     public function destroy(Tour $tour)
@@ -144,7 +154,7 @@ class TourController extends Controller
         $image->delete();
     }
     $tour->delete();
-    return redirect()->route('tours.index')->with('success', 'Tour deleted successfully!');
+    return redirect()->route('admin.tour_management.index')->with('success', 'Tour deleted successfully!');
     }
 
 }

@@ -35,7 +35,13 @@
                     <p><i class="bi bi-geo-alt-fill text-danger"></i> Điểm đến: {{ $tour->location->name }}</p>
                     <p><i class="bi bi-clock-fill text-warning"></i> Thời gian: {{ $tour->duration }} ngày</p>
                     <p><i class="bi bi-people-fill text-info"></i> Số người tối đa: {{ $tour->max_people }}</p>
-                    <a href="#" class="btn btn-primary w-100 mt-2">Đặt Tour</a>
+                    @if(Auth::check())
+                        <a href="{{ route('booking.order', ['tour' => $tour->id]) }}" class="btn btn-primary w-100 mt-2">
+                            Đặt Tour
+                        </a>
+                    @else
+                        <button class="btn btn-primary w-100 mt-2" onclick="showLoginAlert()">Đặt Tour</button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -53,7 +59,7 @@
                                 </button>
                             </h2>
                             <div id="collapse{{ $index }}" class="accordion-collapse collapse" data-bs-parent="#tourScheduleAccordion">
-                                <div class="accordion-body">{{ $schedule->activity }}</div>
+                                <div class="accordion-body">{!! nl2br(e($schedule->activity)) !!}</div>
                             </div>
                         </div>
                     @endforeach
@@ -61,4 +67,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function showLoginAlert() {
+            // alert("Bạn cần đăng nhập để đặt tour!");
+            Swal.fire({
+                icon: "warning",
+                title: "Đăng nhập để đặt tour!",
+                text: "Bạn cần đăng nhập để thực hiện chức năng này.",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#3085d6"
+            });
+        }
+    </script>
 @endsection

@@ -7,7 +7,7 @@
         @csrf
         <div class="form-group mb-3">
             <label for="day_number" class="form-label">Ngày số:</label>
-            <input type="number" name="day_number" class="form-control" required>
+            <input type="number" name="day_number" class="form-control" value="{{ $nextDay }}" max="{{ $tour->duration }}"  required>
         </div>
         <div class="form-group mb-3">
             <label for="activity" class="form-label">Hoạt động:</label>
