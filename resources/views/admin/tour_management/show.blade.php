@@ -14,13 +14,14 @@
             <p><strong>Thời gian:</strong> {{ $tour->duration }} ngày</p>
             <p><strong>Danh mục:</strong> {{ $tour->category->name }}</p>
             <p><strong>Địa điểm:</strong> {{ $tour->location->name }}</p>
+            <p><strong>Điểm xuất phát:</strong> {{ $tour->departureLocation->name ?? 'Không xác định' }}</p>
             <p><strong>Số người tối đa:</strong> {{ $tour->max_people }}</p>
             <p><strong>Trạng thái:</strong> 
                 <span class="badge {{ $tour->status == 'active' ? 'bg-success' : 'bg-danger' }}">
                     {{ $tour->status == 'active' ? 'Hoạt động' : 'Ngừng hoạt động' }}
                 </span>
             </p>
-            <div id="carouselExample" class="carousel slide">
+            <div id="carouselExample" class="carousel slide" style="width:60% !important">
                 <div class="carousel-inner">
                     @if($tour->image)
                         <div class="carousel-item active">
@@ -55,7 +56,8 @@
         <div class="card-footer">
             <a href="{{ route('admin.tour_management.index') }}" class="btn btn-secondary">Quay lại</a>
             <a href="{{ route('admin.tour_management.edit', $tour->id) }}" class="btn btn-warning">Chỉnh sửa</a>
-            <a href="{{ route('admin.schedules.index', $tour->id) }}">Xem lịch trình</a>
+            <a href="{{ route('admin.schedules.index', $tour->id) }}" class="btn btn-primary">Xem lịch trình</a>
+            <a href="{{ route('admin.reviews.index', $tour->id) }}" class="btn btn-primary">Xem đánh giá</a>
         </div>
     </div>
 </div>

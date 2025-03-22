@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Category;
 use App\Models\Location;
+use App\Models\Slider;
 use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         //
         $categories = Category::all();
         $locations = Location::all();
-        View::share(compact('categories', 'locations'));
+        $sliders = Slider::where('is_active', 1)->orderBy('id', 'desc')->get();
+        View::share(compact('categories', 'locations','sliders'));
     }
 }

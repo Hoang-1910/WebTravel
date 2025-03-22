@@ -6,6 +6,7 @@
         data-tour-id="{{ $tour->id }}"
         data-duration="{{ $tour->duration }}"
         data-schedules="{{ $tour->schedules_count }}">Thêm lịch trình</a>
+    @if($tour->schedules_count > 0)
     <table class="table mt-3 table-bordered">
         <thead>
             <tr>
@@ -31,6 +32,9 @@
             @endforeach
         </tbody>
     </table>
+    @else
+        <h4 class="mt-3">Chưa có lịch trình nào cho tour này.</h4>
+    @endif
 
     <style>
         .formatted-text {

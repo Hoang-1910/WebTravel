@@ -15,6 +15,7 @@ class Tour extends Model
         'duration',
         'category_id',
         'location_id',
+        'departure_location',
         'image',
         'status',
         'max_people', // Thêm trường này
@@ -36,5 +37,17 @@ class Tour extends Model
     public function schedules()
     {
         return $this->hasMany(Schedule::class);
+    }
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+    public function departureLocation()
+    {
+        return $this->belongsTo(Location::class, 'departure_location', 'id');
+    }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }

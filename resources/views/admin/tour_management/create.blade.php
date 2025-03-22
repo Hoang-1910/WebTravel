@@ -43,6 +43,14 @@
             </select>
         </div>
         <div class="mb-3">
+            <label class="form-label">Điểm xuất phát</label>
+            <select class="form-control" name="departure_location" required>
+                @foreach($locations as $location)
+                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
             <label for="max_people" class="form-label">Số người tối đa:</label>
             <input type="number" name="max_people" class="form-control" value="{{ old('max_people', $tour->max_people ?? '') }}" min="1">
         </div>

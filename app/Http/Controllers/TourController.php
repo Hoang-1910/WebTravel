@@ -19,7 +19,7 @@ class TourController extends Controller
     }
     public function showDetail($tour, Category $category)
     {
-        $tour = Tour::with(['images', 'schedules'])->findOrFail($tour); // Lấy tour + ảnh + lịch trình
+        $tour = Tour::with(['images', 'schedules', 'departureLocation'])->findOrFail($tour); // Lấy tour + ảnh + lịch trình
         $categories = Category::findOrFail($category); // Lấy danh mục theo ID
         $tourImages = $tour->images; // Lấy danh sách ảnh liên quan
         $schedules = $tour->schedules; // Lấy lịch trình của tour
@@ -40,6 +40,7 @@ class TourController extends Controller
             'duration' => 'required|integer|min:1',
             'category_id' => 'required|exists:categories,id',
             'location_id' => 'required|exists:locations,id',
+            'departure_location' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'status' => 'required|in:active,inactive',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -85,6 +86,7 @@ class TourController extends Controller
             'duration' => 'required|integer|min:1',
             'category_id' => 'required|exists:categories,id',
             'location_id' => 'required|exists:locations,id',
+            'departure_location' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'status' => 'required|in:active,inactive',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -126,7 +128,7 @@ class TourController extends Controller
 
     public function show($id)
     {
-        $tour = Tour::with(['category', 'location'])->findOrFail($id);
+        $tour = Tour::with(['category', 'location', 'departureLocation'])->findOrFail($id);
         $tourImages = TourImage::where('tour_id', $id)->get(); // Lấy ảnh phụ
 
         return view('admin.tour_management.show', compact('tour', 'tourImages'));
@@ -134,7 +136,7 @@ class TourController extends Controller
 
     public function showInUser($id){
         // Lấy thông tin tour theo ID
-        $tour = Tour::with(['location', 'schedules'])->findOrFail($id);
+        $tour = Tour::with(['location', 'schedules', 'reviews', 'departureLocation'])->findOrFail($id);
 
         // Lấy hình ảnh liên quan đến tour
         $tourImages = TourImage::where('tour_id', $id)->get();
@@ -146,15 +148,54 @@ class TourController extends Controller
 
     public function destroy(Tour $tour)
     {
-    // Xóa ảnh chính
-    Storage::disk('public')->delete($tour->image);
-    // Xóa ảnh phụ
-    foreach ($tour->images as $image) {
-        Storage::disk('public')->delete($image->image);
-        $image->delete();
-    }
-    $tour->delete();
-    return redirect()->route('admin.tour_management.index')->with('success', 'Tour deleted successfully!');
+        // Xóa ảnh chính
+        Storage::disk('public')->delete($tour->image);
+        // Xóa ảnh phụ
+        foreach ($tour->images as $image) {
+            Storage::disk('public')->delete($image->image);
+            $image->delete();
+        }
+        $tour->delete();
+        return redirect()->route('admin.tour_management.index')->with('success', 'Tour deleted successfully!');
     }
 
+    public function search(Request $request)
+{
+    // Validate dữ liệu nhập vào
+    $request->validate([
+        'departure_location' => 'nullable|string|max:255',
+        'destination' => 'nullable|exists:locations,id',
+        'people' => 'nullable|integer|min:1',
+    ]);
+
+    // Lấy dữ liệu từ request
+    $departureLocation = $request->departure_location;
+    $destinationId = $request->destination;
+    $people = $request->people;
+
+    // Tạo query builder ban đầu
+    $tours = Tour::query()->where('status', 'active');
+
+    // Nếu có điểm xuất phát, thêm điều kiện
+    if ($departureLocation) {
+        $tours->where('departure_location', 'LIKE', "%{$departureLocation}%");
+    }
+
+    // Nếu có địa điểm đến, thêm điều kiện
+    if ($destinationId) {
+        $tours->where('location_id', $destinationId);
+    }
+
+    // Nếu có số lượng người, thêm điều kiện
+    if ($people) {
+        $tours->where('max_people', '>=', $people);
+    }
+
+    // Lấy kết quả và sắp xếp theo tour mới nhất
+    $tours = $tours->orderBy('created_at', 'desc')->get();
+
+    return view('user.search_results', compact('tours'));
+}
+
+    
 }

@@ -26,14 +26,25 @@
             </div>
     
             <!-- Liên kết -->
-            <div class="top-links d-flex align-items-center">
+            <div class="top-links d-flex align-items-center" style="white-space: nowrap;">
                 <a href="#" class="text-white me-3"><i class="fas fa-store"></i> Hệ thống giao dịch</a>
                 <a href="#" class="text-white me-3"><i class="fas fa-user-plus"></i> Đăng ký đại lý</a>
                 <a href="#" class="text-white me-3"><i class="fas fa-comment"></i> Phiếu góp ý</a>
     
                 @auth
-                    <span class="text-white me-3"><i class="fas fa-user"></i> Xin chào, {{ Auth::user()->name }}</span>
-                    <a class="text-white" href="{{ route('user.logout') }}"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
+                <i class="fas fa-user pe-2"></i> Xin chào, {{ Auth::user()->name }}!
+                <div class="dropdown">
+                    <a class="btn text-white dropdown-toggle-custom ms-0">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu p-0 m-0" style="overflow: hidden">
+                        <li><a class="dropdown-item text-black ms-0" href="{{ route('user.profile') }}">Xem thông tin</a></li>
+                        <li><a class="dropdown-item text-black ms-0" href="{{ route('booked-tours') }}">Xem tour đã đặt</a></li>
+                        <li><a class="dropdown-item text-black ms-0" href="{{ route('user.change-password') }}">Đổi mật khẩu</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger ms-0" href="{{ route('user.logout') }}"><i class="fas fa-sign-out-alt pe-1"></i>Đăng xuất</a></li>
+                    </ul>
+                </div>                
                 @else
                     <a href="#" class="text-white me-3" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="fas fa-sign-in-alt"></i> Đăng Nhập</a>
                     <a href="#" class="text-white" data-bs-toggle="modal" data-bs-target="#registerModal"><i class="fas fa-user-plus"></i> Đăng Ký</a>
@@ -50,12 +61,12 @@
         <div class="container">
             <nav class="navbar">
                 <div class="logo">
-                    <a href="/">
+                    <a href="{{ route('user.homepage') }}">
                         <img src="{{ asset('storage/tours/logo-dulichnamchau.png') }}" alt="Du Lịch Việt Logo">
                     </a>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="#trang-chu">Trang Chủ</a></li>
+                    <li><a href="{{ route('user.homepage') }}">Trang Chủ</a></li>
                     <li class="dropdown">
                         <a href="#tour">Du lịch <i class="fas fa-chevron-down"></i></a>
                         <ul class="dropdown-content p-0">
@@ -195,7 +206,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" class="text-decoration-none">Quên mật khẩu?</a>
+                    <a href="{{ route('user.reset_password') }}" class="text-decoration-none">Quên mật khẩu?</a>
                 </div>
             </div>
         </div>
@@ -233,9 +244,6 @@
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="text-decoration-none">Quên mật khẩu?</a>
                 </div>
             </div>
         </div>
@@ -286,6 +294,60 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     <style>
+        .truncate-text {
+    width: 200px; /* Giới hạn chiều rộng */
+    white-space: nowrap; /* Không xuống dòng */
+    overflow: hidden; /* Ẩn phần dư thừa */
+    text-overflow: ellipsis; /* Hiển thị dấu ... */
+    max-width: 700px !important;
+}
+
+        /* Tùy chỉnh dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Tùy chỉnh nút dropdown */
+.dropdown-toggle-custom {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+    transition: background 0.3s;
+}
+
+
+/* Tùy chỉnh menu */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 8px 0;
+    list-style: none;
+    z-index: 10000 !important;
+}
+
+/* Hiển thị dropdown khi hover */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Tùy chỉnh từng mục */
+.dropdown-item {
+    padding: 10px 20px;
+    font-size: 14px;
+    display: block;
+    color: black;
+    text-decoration: none;
+}
+
+
         .carousel-caption{
             right: 0 !important;
             bottom: 40% !important;

@@ -1,7 +1,7 @@
 @extends('user.layout')
 
 @section ('content_user')
-    <div id="carouselExampleCaptions" class="carousel slide">
+    {{-- <div id="carouselExampleCaptions" class="carousel slide">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -38,41 +38,83 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
+    </div> --}}
+
+    <div id="homepage-slider" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @foreach ($sliders as $key => $slider)
+                <div class="carousel-item {{ $key == 0 ? 'active' : '' }} " style="max-height:550px !important;">
+                    <img src="{{ asset('storage/' . $slider->image) }}" class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h1>{{ $slider->title }}</h1>
+                        <p>{{ $slider->subtitle }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#homepage-slider" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#homepage-slider" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
+    
 
     <!-- Search Section -->
-    <section class="search-section">
-        <div class="container">
-            <div class="search-box">
-                <form class="search-form">
-                    <div class="search-grid">
-                        <div class="form-group">
-                            <label class="form-label"><label><i class="fas fa-map-marker-alt"></i> Điểm đến</label></label>
-                            <select name="destination" class="form-control" required>
-                                <option value="">Chọn điểm đến</option>
-                                @foreach ($locations as $location)
-                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">
-                                <i class="fas fa-users"></i>
-                                Số người
-                            </label>
-                            <input type="number" class="form-control" min="1" value="1" required>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn-search">
-                                <i class="fas fa-search"></i>
-                                Tìm Tour
-                            </button>
-                        </div>
+<section class="search-section">
+    <div class="container">
+        <div class="search-box">
+            <form class="search-form" action="{{ route('tours.search') }}" method="GET">
+                @csrf
+                <div class="search-grid">
+                    <!-- Chọn điểm xuất phát -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-map-marker-alt"></i> Điểm xuất phát
+                        </label>
+                        <select name="departure_location" class="form-control" >
+                            <option value="">Chọn điểm xuất phát</option>
+                            @foreach ($locations as $location)
+                                <option value="{{ $location->id }}">{{ $location->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                </form>
-            </div>
+                    <!-- Chọn điểm đến -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-map-marker-alt"></i> Điểm đến
+                        </label>
+                        <select name="destination" class="form-control" >
+                            <option value="">Chọn điểm đến</option>
+                            @foreach ($locations as $location)
+                                <option value="{{ $location->id }}">{{ $location->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <!-- Nhập số người -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-users"></i> Số người
+                        </label>
+                        <input type="number" name="people" class="form-control" min="1" value="1" required>
+                    </div>
+
+                    <!-- Nút tìm kiếm -->
+                    <div class="form-group">
+                        <button type="submit" class="btn-search">
+                            <i class="fas fa-search"></i> Tìm Tour
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <div class="container">
         @foreach($categories as $category)
@@ -99,8 +141,9 @@
                                 <div class="tour-content">
                                     <h3>{{ $tour->name }}</h3>
                                     <div class="tour-info">
-                                        <span><i class="far fa-clock"></i>{{ $tour->duration }} ngày</span>
-                                        <span><i class="fas fa-map-marker-alt"></i>{{ $tour->location ? $tour->location->name : 'Không xác định'  }}</span>
+                                        <span style="white-space:nowrap"><i class="far fa-clock"></i>{{ $tour->duration }} ngày</span>
+                                        <span style="white-space:nowrap"><i class="fas fa-map-marker-alt"></i>{{ $tour->departureLocation->name ?? 'Null' }}</span>
+                                        <span style="white-space:nowrap"><i class="fa-solid fa-plane-departure"></i>{{ $tour->location ? $tour->location->name : 'Không xác định'  }}</span>
                                     </div>
                                     <a href="{{ route('user.detail_tour',  ['id' => $tour->id]) }}" class="btn-secondary">Xem chi tiết</a>
                                 </div>

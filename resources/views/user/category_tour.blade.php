@@ -27,7 +27,7 @@
                             <div class="tour-meta">
                                 <span><i class="far fa-calendar-alt"></i> 18/04/2025</span>
                             </div>
-                            <a href="#" class="btn-secondary">Xem chi tiết</a>
+                            <a href="{{ route('user.detail_tour',  ['id' => $tour->id]) }}" class="btn-secondary">Xem chi tiết</a>
                         </div>
                     </div>
                 @endforeach

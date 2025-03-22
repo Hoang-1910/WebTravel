@@ -51,7 +51,7 @@ class BookingController extends Controller
         'status' => 'pending'
     ]);
 
-    return redirect()->route('user.homepage')->with('success', 'Đặt tour thành công!');
+    return back()->with('success', 'Đặt tour thành công!');
 }
  
      // Hiển thị form chỉnh sửa đặt tour
@@ -73,8 +73,23 @@ class BookingController extends Controller
              'status' => $request->status
          ]);
  
-         return redirect()->route('bookings.index')->with('success', 'Cập nhật trạng thái thành công!');
+         return redirect()->route('admin.bookings.index')->with('success', 'Cập nhật trạng thái thành công!');
      }
+
+     public function confirm(Booking $booking)
+{
+    $booking->update(['status' => 'confirmed']);
+
+    return redirect()->route('admin.bookings.index')->with('success', 'Đã xác nhận đặt tour!');
+}
+
+public function cancel(Booking $booking)
+{
+    $booking->update(['status' => 'cancelled']);
+
+    return redirect()->route('admin.bookings.index')->with('success', 'Đã xác nhận đặt tour!');
+}
+
  
      // Xóa đặt tour
      public function destroy(Booking $booking)
@@ -82,4 +97,17 @@ class BookingController extends Controller
          $booking->delete();
          return redirect()->route('bookings.index')->with('success', 'Xóa đặt tour thành công!');
      }
+
+     public function bookedTours()
+    {
+        $bookings = Booking::with('tour')->where('user_id', Auth::id())->orderBy('booking_date', 'desc')->get();
+        return view('user.booked_tours', compact('bookings'));
+    }
+
+    public function cancelBooking($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->update(['status' => 'cancelled']);
+        return redirect()->route('booked-tours')->with('success', 'Hủy đặt tour thành công!');
+    }
 }

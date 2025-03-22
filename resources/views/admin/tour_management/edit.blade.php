@@ -51,7 +51,16 @@
                         @endforeach
                     </select>
                 </div>
-
+                <div class="mb-3">
+                    <label class="form-label">Điểm xuất phát</label>
+                    <select class="form-control" name="departure_location" required>
+                        @foreach($locations as $location)
+                            <option value="{{ $location->id }}" {{ $tour->departure_location == $location->id ? 'selected' : '' }}>
+                                {{ $location->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="mb-3">
                     <label class="form-label">Trạng thái</label>
                     <select name="status" class="form-control">

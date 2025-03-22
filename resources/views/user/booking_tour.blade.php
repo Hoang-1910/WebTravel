@@ -62,6 +62,17 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+     document.addEventListener("DOMContentLoaded", function() {
+        let successMessage = "{{ session('success') }}";
+        if (successMessage) {
+            Swal.fire({
+                title: "Đặt tour thành công!",
+                text: "Cảm ơn bạn đã đặt tour. Chúng tôi sẽ liên hệ sớm nhất.",
+                icon: "success",
+                confirmButtonText: "OK"
+            });
+        }
+    });
 document.addEventListener("DOMContentLoaded", function () {
     // Lấy các phần tử input
     let numPeopleInput = document.querySelector("input[name='num_people']");

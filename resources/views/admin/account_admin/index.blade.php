@@ -1,7 +1,10 @@
 @extends('admin.layout')
 @section('content_admin')
-{{-- <a href="{{ route('admins.create') }}" class="btn btn-primary">Thêm Admin</a> --}}
-<table class="table">
+<a href="{{ route('admin.account_admin.create') }}" class="btn btn-primary">Thêm Admin</a>
+@if(session('success'))
+        <div class="alert alert-success mt-3 mb-3">{{ session('success') }}</div>
+    @endif
+<table class="table mt-2">
     <tr>
         <th>#</th>
         <th>Tên</th>

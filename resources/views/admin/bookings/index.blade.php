@@ -4,12 +4,12 @@
 <div class="container mt-4">
     <h2>Danh sách đặt tour</h2>
     
-    <table class="table table-bordered">
+    <table class="table table-bordered table-striped text-center" style="white-space: nowrap;">
         <thead>
             <tr>
                 <th>#</th>
                 <th>Người đặt</th>
-                <th>Tour</th>
+                <th>Tên Tour</th>
                 <th>Ngày xuất phát</th>
                 <th>Số khách</th>
                 <th>Trạng thái</th>
@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ $key + 1 }}</td>
                 <td>{{ $booking->user->name }}</td>
-                <td>{{ $booking->tour->name }}</td>
+                <td class="truncate-text text-start">{{ $booking->tour->name }}</td>
                 <td>{{ $booking->departure_date }}</td>
                 <td>{{ $booking->num_people }}</td>
                 <td>
@@ -34,7 +34,19 @@
                     @endif
                 </td>
                 <td>
-                    {{-- <a href="{{ route('admin.bookings.show', $booking->id) }}" class="btn btn-info btn-sm">Xem chi tiết</a> --}}
+                    @if($booking->status == "pending")
+                        <form action="{{ route('admin.bookings.confirm', $booking->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn btn-success">Xác nhận</button>
+                        </form>    
+                    @elseif($booking->status != "cancelled")
+                        <form action="{{ route('admin.bookings.cancel', $booking->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn btn-danger">Hủy</button>
+                        </form>
+                    @endif
                 </td>
             </tr>
             @endforeach

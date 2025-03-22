@@ -11,7 +11,9 @@
 <body style="background-color: #f6f6f6; display:flex;">
     <header class="header" style="width: 20% !important;">
         <div class="container bg-white" style="min-height:690px !important;">
-            <ul class="header-content" style="padding: 40px 0;">
+            
+            <h2 class="text-center p-3">Web Travel</h2>
+            <ul class="header-content" style="padding: 40px 0; list-style-type: none;">
                 <li class="header-item"><a href="{{ route('admin.dashboard') }}" class="header-link">Trang chủ</a></li>
                 <li class="header-item"><a href="{{ route('admin.tour_management.index') }}" class="header-link">Quản lý Tour</a></li>
                 <li class="header-item"><a href="{{ route('admin.categories.index') }}" class="header-link">Quản lý Category</a></li>
@@ -19,16 +21,22 @@
                 <li class="header-item"><a href="{{ route('admin.bookings.index') }}" class="header-link">Quản lý đặt Tour</a></li>
                 <li class="header-item"><a href="{{ route('admin.account_user.index') }}" class="header-link">Quản lý người dùng</a></li>
                 <li class="header-item"><a href="" class="header-link">Quản lý đánh giá</a></li>
-                <li class="header-item"><a href="" class="header-link">Quản lý khách sạn</a></li>
+                <li class="header-item"><a href="{{ route('admin.sliders.index') }}" class="header-link">Quản lý Slider</a></li>
+                <li class="header-item"><a href="{{ route('admin.hotels.index') }}" class="header-link">Quản lý khách sạn</a></li>
                 <li class="header-item"><a href="{{ route('admin.account_admin.index') }}" class="header-link">Quản lý tài khoản admin</a></li>
             </ul>
         </div>
     </header>
     <div class="container mt-3" style="max-height:715px; overflow:scroll"">
+        @if(session()->has('admin'))
         <div class="container d-flex justify-content-between">
             <h2>Chào mừng, {{ session('admin')->name }}!</h2>
             <a href="{{ route('admin.logout') }}" class="btn btn-danger">Đăng xuất</a>
         </div>
+    @else
+        <script>window.location.href = "{{ route('admin.login') }}";</script>
+    @endif
+    
         <div class="container bg-white p-3 mt-3" style="border-radius:10px;">
             @yield('content_admin')
         </div>
@@ -53,5 +61,14 @@
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <style>
+        .truncate-text {
+            width: 150px; /* Giới hạn chiều rộng */
+            white-space: nowrap; /* Không xuống dòng */
+            overflow: hidden; /* Ẩn phần dư thừa */
+            text-overflow: ellipsis; /* Hiển thị dấu ... */
+            max-width: 500px !important;
+        }
+    </style>
 </body>
 </html>
