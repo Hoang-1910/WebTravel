@@ -141,8 +141,12 @@ class TourController extends Controller
         // Lấy hình ảnh liên quan đến tour
         $tourImages = TourImage::where('tour_id', $id)->get();
 
+        $relatedTours = Tour::where('location_id', $tour->location_id)
+                    ->where('id', '!=', $tour->id)
+                    ->limit(4)
+                    ->get();
         // Trả về view chi tiết tour
-        return view('user.detail_tour', compact('tour', 'tourImages')); 
+        return view('user.detail_tour', compact('tour', 'tourImages', 'relatedTours')); 
     }
 
 

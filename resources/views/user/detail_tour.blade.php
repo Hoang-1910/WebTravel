@@ -79,17 +79,19 @@
                 <!-- Danh sách đánh giá -->
                 <div class="row mt-5">
                     <div class="col">
-                        <h4>Đánh giá từ người dùng</h4>
+                        <h5>Đánh giá từ khách hàng</h5>
                         @if($tour->reviews->count() > 0)
                             @foreach($tour->reviews as $review)
                                 <div class="card mb-3 shadow-sm">
                                     <div class="card-body">
-                                        <strong>{{ $review->user->name }}</strong>
-                                        <p>
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                <span style="color: {{ $i <= $review->rating ? 'gold' : '#ccc' }}">&#9733;</span>
-                                            @endfor
-                                        </p>
+                                        <div class="d-flex">
+                                            <strong class="me-3">{{ $review->user->name }}</strong>
+                                            <p>
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <span style="color: {{ $i <= $review->rating ? 'gold' : '#ccc' }}">&#9733;</span>
+                                                @endfor
+                                            </p>
+                                        </div>
                                         <p>{{ $review->comment }}</p>
                                         <small class="text-muted">{{ $review->created_at->format('d/m/Y H:i') }}</small>
                                     </div>
@@ -123,7 +125,7 @@
                             </form>
                         @else
                             {{-- <button class="btn btn-primary" onclick="showLoginAlert()">Đăng nhập để đánh giá</button> --}}
-                            <span>Bạn cần <button class="btn" style="padding: 0; text-decoration: underline; color: blue;" data-bs-toggle="modal" data-bs-target="#loginModal">Đăng nhập</button> để thực hiện chức năng này</span>
+                            <p class="text-center">Bạn cần <button class="btn" style="padding: 0;padding-bottom:5px; text-decoration: underline; color: blue;" data-bs-toggle="modal" data-bs-target="#loginModal">Đăng nhập</button> để thực hiện chức năng này</p>
                         @endif
                     </div>
                 </div>
@@ -131,7 +133,26 @@
         </div>
 
         <div class="col-4">
-            
+            <div class="card card-style m-0 p-4">
+                <h3>Tour liên quan</h3>
+                @if($relatedTours->count() > 0)
+                    @foreach($relatedTours as $relatedTour)
+                        <div class="row shadow-sm mb-3 p-2">
+                            <div class="col-4">
+                                <img src="{{ asset('storage/' . $relatedTour->image) }}" alt="{{ $relatedTour->name }}" class="img-fluid">
+                            </div>
+                            <div class="col-8">
+                                <a class="text-black text_related" style="text-decoration:none; font-weight:bold" href="{{ route('user.detail_tour', ['id' => $relatedTour->id]) }}">{{ $relatedTour->name }}</a>
+                                <p class="mb-0" style="font-size: :10px">{{ number_format($relatedTour->price) }} VNĐ</p>
+                                <p class="mb-0" style="font-size: :10px">Điểm xuất phát: {{ $relatedTour->departureLocation->name ?? 'Không xác định' }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+
+                @else
+                    <p>Không có tour liên quan</p>
+                @endif
+            </div>
         </div>
     </div>
 
