@@ -72,29 +72,23 @@ class UserController extends Controller
     }
     
     public function login(Request $request)
-{
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required|min:6',
-    ]);
-
-    $user = User::where('email', $request->email)->first();
-
-    if ($user && Hash::check($request->password, $user->password)) {
-        session(['user' => $user]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Đăng nhập thành công!',
-            'redirect' => route('user.homepage')
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6',
         ]);
+    
+        $user = User::where('email', $request->email)->first();
+    
+        if ($user && Hash::check($request->password, $user->password)) {
+            session(['user' => $user]);
+    
+            return redirect()->route('user.homepage')->with('success', 'Đăng nhập thành công!');
+        }
+    
+        return redirect()->back()->with('error', 'Thông tin đăng nhập không chính xác.');
     }
-
-    return response()->json([
-        'success' => false,
-        'errors' => ['email' => 'Thông tin đăng nhập không chính xác.']
-    ], 422);
-}
+    
 
     public function register(Request $request)
     {

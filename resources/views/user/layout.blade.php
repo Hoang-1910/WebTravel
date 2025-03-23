@@ -38,7 +38,7 @@
                     <a class="btn text-white dropdown-toggle-custom ms-0">
                         <i class="fa-solid fa-chevron-down"></i>
                     </a>
-                    <ul class="dropdown-menu p-0 m-0" style="overflow: hidden">
+                    <ul class="dropdown-menu p-0 m-0" style="overflow: hidden; left: -135px;">
                         <li><a class="dropdown-item text-black ms-0" href="{{ route('user.profile') }}">Xem thông tin</a></li>
                         <li><a class="dropdown-item text-black ms-0" href="{{ route('booked-tours') }}">Xem tour đã đặt</a></li>
                         <li><a class="dropdown-item text-black ms-0" href="{{ route('user.change-password') }}">Đổi mật khẩu</a></li>
@@ -250,42 +250,7 @@
         </div>
     </div>
 
-    <script>
-        $(document).ready(function() {
-            $('#registerForm').on('submit', function(e) {
-                e.preventDefault();
-
-                $('.text-danger').text('');
-                $('#register-alert').removeClass('alert-success alert-danger').addClass('d-none');
-
-                $.ajax({
-                    url: "{{ route('user.register') }}",
-                    type: "POST",
-                    data: $(this).serialize(),
-                    beforeSend: function() {
-                        console.log("Sending request...");
-                    },
-                    success: function(response) {
-                        console.log("Response received:", response);
-                        $('#register-alert').text(response.success).addClass('alert-success').removeClass('d-none');
-                        $('#registerForm')[0].reset();
-                        setTimeout(() => $('#registerModal').modal('hide'), 2000);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error:", xhr);
-                        if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
-                            if (errors.name) $('.error-name').text(errors.name[0]);
-                            if (errors.email) $('.error-email').text(errors.email[0]);
-                            if (errors.password) $('.error-password').text(errors.password[0]);
-                        } else {
-                            $('#register-alert').text("Có lỗi xảy ra!").addClass('alert-danger').removeClass('d-none');
-                        }
-                    }
-                });
-            });
-        });
-        </script>
+    
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -294,7 +259,27 @@
     <!-- Thư viện JavaScripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    <style>
-    </style>
+    
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'OK'
+            })
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: '{{ session('error') }}',
+                confirmButtonText: 'OK'
+            })
+        </script>
+    @endif
 </body>
 </html>
