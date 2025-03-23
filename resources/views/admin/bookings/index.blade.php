@@ -3,7 +3,6 @@
 @section('content_admin')
 <div class="container mt-4">
     <h2>Danh sách đặt tour</h2>
-    
     <table class="table table-bordered table-striped text-center" style="white-space: nowrap;">
         <thead>
             <tr>
@@ -50,5 +49,6 @@
                 </td>
             </tr>
             @endforeach
+        </tbody>
 </div>
 @endsection
