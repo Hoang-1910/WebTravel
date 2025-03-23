@@ -9,10 +9,15 @@ class Schedule extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['tour_id', 'day_number', 'activity'];
+    protected $fillable = ['tour_id', 'day_number', 'activity', 'hotel_id'];
 
     public function tour()
     {
         return $this->belongsTo(Tour::class);
     }
+
+    public function hotel()
+    {
+        return $this->belongsTo(Hotel::class);
+    }   
 }

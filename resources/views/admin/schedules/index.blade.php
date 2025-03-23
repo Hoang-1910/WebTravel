@@ -11,7 +11,8 @@
         <thead>
             <tr>
                 <th class="col-1">Ngày</th>
-                <th class="col-9">Hoạt động</th>
+                <th class="col-6">Hoạt động</th>
+                <th class="col-3">Khách sạn</th>
                 <th class="col-2">Hành động</th>
             </tr>
         </thead>
@@ -21,6 +22,7 @@
                     <td>Ngày {{ $schedule->day_number }}</td>
                     {{-- <td>{{ $schedule->activity }}</td> --}}
                     <td class="formatted-text">{!! nl2br(e($schedule->activity)) !!}</td>
+                    <td>{{ $schedule->hotel ? $schedule->hotel->name : 'Chưa chọn khách sạn' }}</td>
                     <td>
                         <a href="{{ route('admin.schedules.edit', [$tour->id, $schedule->id]) }}" class="btn btn-warning">Chỉnh sửa</a>
                         <form action="{{ route('admin.schedules.destroy', [$tour->id, $schedule->id]) }}" method="POST" style="display:inline;">

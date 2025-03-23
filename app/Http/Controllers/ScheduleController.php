@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tour;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use App\Models\Hotel;
 
 class ScheduleController extends Controller
 {
@@ -23,6 +24,8 @@ class ScheduleController extends Controller
     $existingDays = $tour->schedules->pluck('day_number')->toArray(); // Lấy danh sách ngày đã có
     $nextDay = 1;
 
+    $hotels = Hotel::all(); // Lấy danh sách khách sạn
+
     // Tìm số ngày tiếp theo chưa được sử dụng
     for ($i = 1; $i <= $tour->duration; $i++) {
         if (!in_array($i, $existingDays)) {
@@ -31,7 +34,7 @@ class ScheduleController extends Controller
         }
     }
 
-    return view('admin.schedules.create', compact('tour', 'nextDay'));
+    return view('admin.schedules.create', compact('tour', 'nextDay', 'hotels'));
 }
 
 
@@ -41,6 +44,7 @@ class ScheduleController extends Controller
         $validated = $request->validate([
             'day_number' => 'required|integer|min:1',
             'activity' => 'required|string',
+            'hotel_id' => 'required|exists:hotels,id',
         ]);
 
         $tour = Tour::findOrFail($tourId);
@@ -53,7 +57,8 @@ class ScheduleController extends Controller
     public function edit($tourId, Schedule $schedule)
     {
         $tour = Tour::findOrFail($tourId);
-        return view('admin.schedules.edit', compact('tour', 'schedule'));
+        $hotels = Hotel::all();
+        return view('admin.schedules.edit', compact('tour', 'schedule', 'hotels'));
     }
 
     // Cập nhật lịch trình
@@ -62,6 +67,7 @@ class ScheduleController extends Controller
         $validated = $request->validate([
             'day_number' => 'required|integer|min:1',
             'activity' => 'required|string',
+            'hotel_id' => 'required|exists:hotels,id',
         ]);
 
         $schedule->update($validated);
