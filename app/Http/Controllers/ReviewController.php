@@ -34,4 +34,12 @@ class ReviewController extends Controller
     return view('admin.review.index', compact('tour'));
 }
 
+public function destroy($id)
+{
+    $review = Review::findOrFail($id);
+    $review->delete();
+
+    return redirect()->back()->with('success', 'Đánh giá đã được xóa!');
+}
+
 }

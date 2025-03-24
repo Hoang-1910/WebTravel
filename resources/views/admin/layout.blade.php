@@ -23,9 +23,12 @@
         .header-item {
             padding: 0 !important;
         }
+        .pagination {
+            padding-left: 20px !important;
+        }
     </style>
 </head>
-<body style="background-color: #f6f6f6; display:flex;">
+<body style="background-color: #f6f6f6; display:flex; min-height: 700px !important;">
     <header class="header" style="width: 20% !important;background-color: #323a49; max-height: 700px !important;">
         <div class="container text-white p-0" style="max-height: 700px !important;">
             <h2 class="text-center p-3 pb-0 m-0">Web Travel</h2>
@@ -36,7 +39,6 @@
                 <li class="header-item"><a href="{{ route('admin.locations.index') }}" class="header-link text-white px-3"><i class="fa-solid fa-location-dot me-2"></i>Quản lý Location</a></li>
                 <li class="header-item"><a href="{{ route('admin.bookings.index') }}" class="header-link text-white px-3"><i class="fa-solid fa-cart-shopping me-2"></i>Quản lý đặt Tour</a></li>
                 <li class="header-item"><a href="{{ route('admin.account_user.index') }}" class="header-link text-white px-3"><i class="fa-solid fa-users me-2"></i>Quản lý người dùng</a></li>
-                <li class="header-item"><a href="" class="header-link text-white px-3"><i class="fa-solid fa-file me-2"></i>Quản lý đánh giá</a></li>
                 <li class="header-item"><a href="{{ route('admin.sliders.index') }}" class="header-link text-white px-3"><i class="fa-solid fa-sliders me-2"></i>Quản lý Slider</a></li>
                 <li class="header-item"><a href="{{ route('admin.hotels.index') }}" class="header-link text-white px-3"><i class="fa-solid fa-hotel me-2"></i>Quản lý khách sạn</a></li>
                 <li class="header-item"><a href="{{ route('admin.account_admin.index') }}" class="header-link text-white px-3"><i class="fa-solid fa-gears me-2"></i>Quản lý tài khoản admin</a></li>
@@ -49,24 +51,25 @@
                 <h2>Chào mừng, {{ session('admin')->name }}!</h2>
                 <a href="{{ route('admin.logout') }}" class="btn btn-danger">Đăng xuất</a>
             </div> --}}
-
-            <div class="container bg-white d-flex justify-content-between align-items-center"  style="border-radius:20px;">
-                <div class="search_input position-relative" style="width: 350px">
+            <div class="container bg-white d-flex justify-content-end align-items-center"  style="border-radius:20px;">
+                {{-- <div class="search_input position-relative" style="width: 350px">
                     <input type="text" class="form-control" placeholder="Tìm kiếm..." style="height: 40px;">
                     <div class="search_icon position-absolute" style="top: 50%; right: 10px; transform: translateY(-50%);">
                         <i class="fas fa-search"></i>
                     </div>
-                </div>
-                <div class="dropdown p-3">
-                    <div class="btn d-flex dropdown-toggle-custom ms-0 align-items-center">
-                        <img class="me-1" width="35" src="{{ asset('storage/tours/manager.png') }}" alt="">
-                        <h5 class="mb-0">{{ session('admin')->name }}</h5>
-                        <i class="fa-solid fa-chevron-down ms-2"></i>
-                    </div>
-                    <ul class="dropdown-menu p-0 m-0" style="overflow: hidden; right:0; width: 100px; left: 86%; top: 70px;">
-                        <li><a href="" class="dropdown-item border-bottom p-2">Xem thông tin</a></li>
-                        <li><a class="dropdown-item text-danger ms-0 p-2" href="{{ route('admin.logout') }}"><i class="fas fa-sign-out-alt pe-1"></i>Đăng xuất</a></li>
-                    </ul>
+                </div> --}}
+                <div class="d-flex align-items-center p-3">
+                    <img class="me-1" width="35" src="{{ asset('storage/tours/manager.png') }}" alt="">
+                    <h5 class="mb-0">{{ session('admin')->name }}</h5>
+                    <div class="dropdown">
+                        <a class="btn d-flex align-items-center dropdown-toggle-custom ms-0">
+                            <i class="fa-solid fa-chevron-down text-black"></i>
+                        </a>
+                        <ul class="dropdown-menu p-0 m-0" style="overflow: hidden; left: -135px;">
+                            <li><a href="{{ route('admin.info') }}" class="dropdown-item border-bottom p-2">Xem thông tin</a></li>
+                            <li><a class="dropdown-item text-danger ms-0 p-2" href="{{ route('admin.logout') }}"><i class="fas fa-sign-out-alt pe-1"></i>Đăng xuất</a></li>
+                        </ul>
+                    </div>  
                 </div>
             </div>
         @else
@@ -77,9 +80,6 @@
             @yield('content_admin')
         </div>
     </div>
-    <footer class="footer">
-
-    </footer>
 
     <style>
         .header-link {
@@ -94,10 +94,6 @@
         .header-item {
             padding-left: 10px;
         }
-    </style>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <style>
         .truncate-text {
             width: 150px; /* Giới hạn chiều rộng */
             white-space: nowrap; /* Không xuống dòng */
@@ -106,5 +102,29 @@
             max-width: 500px !important;
         }
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'OK'
+            })
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: '{{ session('error') }}',
+                confirmButtonText: 'OK'
+            })
+        </script>
+    @endif
 </body>
 </html>

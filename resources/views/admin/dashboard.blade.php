@@ -10,7 +10,11 @@
             <div class="card">
                 <div class="card-header">Số Tour Đã Đặt Theo Tháng</div>
                 <div class="card-body">
-                    <canvas id="bookingsChart"></canvas>
+                    @if (array_sum($bookingsByMonth) > 0)
+                        <canvas id="bookingsChart"></canvas>
+                    @else
+                        <p class="text-center text-muted">Không có dữ liệu để hiển thị.</p>
+                    @endif
                 </div>
             </div>
         </div>
@@ -20,37 +24,51 @@
             <div class="card">
                 <div class="card-header">Doanh Số Theo Tháng</div>
                 <div class="card-body">
-                    <canvas id="revenueChart"></canvas>
+                    @if (array_sum($revenueByMonth) > 0)
+                        <canvas id="revenueChart"></canvas>
+                    @else
+                        <p class="text-center text-muted">Không có dữ liệu để hiển thị.</p>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 
     <div class="row mt-4">
-        <!-- Biểu đồ 5 tour được đặt nhiều nhất -->
+        <!-- Biểu đồ 5 tour được đặt nhiều nhất theo tháng -->
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Top 5 Tour Được Đặt Nhiều Nhất</div>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>Top 5 Tour Được Đặt Nhiều Nhất Theo Tháng</span>
+                    <form method="GET" action="{{ route('admin.dashboard') }}" class="d-flex align-items-center">
+                        <label class="me-2 mb-0" for="month" style="white-space:nowrap;">Chọn tháng:</label>
+                        <input type="month" id="month" name="month" value="{{ $selectedMonth }}" class="form-control me-2">
+                        <button type="submit" class="btn btn-primary">Lọc</button>
+                    </form>
+                </div>
                 <div class="card-body">
-                    <canvas id="topToursChart" width="200" height="200"></canvas>
+                    @if (count($topTourNames) > 0)
+                        <canvas id="topToursChart" width="200" height="200"></canvas>
+                    @else
+                        <p class="text-center text-muted">Không có dữ liệu để hiển thị.</p>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
-
-
 </div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Chuyển Collection thành mảng JSON
-        var bookingsData = @json($bookingsByMonth);
-        var revenueData = @json($revenueByMonth);
+        var bookingsData = @json(array_values($bookingsByMonth));
+        var revenueData = @json(array_values($revenueByMonth));
         var months = @json(array_keys($bookingsByMonth));
-        var topTourNames = @json($topTours->pluck('name')->all());
-        var topTourBookings = @json($topTours->pluck('bookings_count')->all());
-        // Vẽ biểu đồ số tour đã đặt theo tháng
-        if (months.length > 0) {
+
+        var topTourNames = @json($topTourNames);
+        var topTourBookings = @json($topTourBookings);
+
+        if (months.length > 0 && bookingsData.some(value => value > 0)) {
             new Chart(document.getElementById("bookingsChart"), {
                 type: "bar",
                 data: {
@@ -65,12 +83,9 @@
                 },
                 options: { responsive: true }
             });
-        } else {
-            console.warn("Không có dữ liệu để vẽ biểu đồ bookings.");
         }
 
-        // Vẽ biểu đồ doanh số theo tháng
-        if (months.length > 0) {
+        if (months.length > 0 && revenueData.some(value => value > 0)) {
             new Chart(document.getElementById("revenueChart"), {
                 type: "line",
                 data: {
@@ -78,19 +93,17 @@
                     datasets: [{
                         label: "Doanh số (VNĐ)",
                         data: revenueData,
-                        backgroundColor: "rgba(255, 99, 132, 0.6)",
+                        fill: false,
                         borderColor: "rgba(255, 99, 132, 1)",
-                        borderWidth: 2
+                        backgroundColor: "rgba(255, 99, 132, 0.6)",
+                        tension: 0.1
                     }]
                 },
                 options: { responsive: true }
             });
-        } else {
-            console.warn("Không có dữ liệu để vẽ biểu đồ revenue.");
         }
 
-        // Vẽ biểu đồ top 5 tour được đặt nhiều nhất
-        if (topTourNames.length > 0) {
+        if (topTourNames.length > 0 && topTourBookings.some(value => value > 0)) {
             new Chart(document.getElementById("topToursChart"), {
                 type: "pie",
                 data: {
@@ -103,22 +116,15 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false, // Đảm bảo chart không bị kéo giãn
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: "bottom", // Di chuyển chú thích xuống dưới
+                            position: "bottom",
                         }
                     }
                 }
             });
-        } 
-        else {
-            console.warn("Không có dữ liệu để vẽ biểu đồ top tours.");
         }
     });
 </script>
-
-
 @endsection
-
-

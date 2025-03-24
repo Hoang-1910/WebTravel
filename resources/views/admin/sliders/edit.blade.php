@@ -12,7 +12,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Ảnh mới (nếu muốn đổi)</label>
-            <input type="file" name="image" class="form-control">
+            <input type="file" name="image" class="form-control" style="line-height: 35px;">
         </div>
         <div class="mb-3">
             <label class="form-label">Tiêu đề</label>
@@ -28,7 +28,7 @@
             <label class="form-check-label">Sử dụng slider này</label>
         </div>
         <button type="submit" class="btn btn-primary">Cập nhật</button>
-        <a href="{{ route('admin.sliders.index') }}" class="btn btn-secondary">Quay lại</a>
+        <a href="{{ route('admin.sliders.index') }}" class="btn btn-secondary mt-0">Quay lại</a>
     </form>
 </div>
     @if ($errors->any())

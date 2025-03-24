@@ -12,11 +12,19 @@ use Illuminate\Support\Facades\Storage;
 
 class TourController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tours = Tour::with(['category', 'location'])->get();
-        return view('admin.tour_management.index', compact('tours'));
+        $search = $request->input('search');
+
+        $tours = Tour::with(['category', 'location'])
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%$search%");
+            })
+            ->paginate(6);
+
+        return view('admin.tour_management.index', compact('tours', 'search'));
     }
+
     public function showDetail($tour, Category $category)
     {
         $tour = Tour::with(['images', 'schedules', 'departureLocation'])->findOrFail($tour); // Lấy tour + ảnh + lịch trình

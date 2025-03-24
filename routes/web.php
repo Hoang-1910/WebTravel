@@ -72,6 +72,7 @@ Route::get('/admin/locations/create', [LocationController::class, 'create'])->na
 Route::post('/admin/locations', [LocationController::class, 'store'])->name('admin.locations.store'); // Xử lý lưu địa điểm
 
 //Route Account Amin
+Route::get('/admin/info', [AdminAccountController::class, 'showInfo'])->name('admin.info');
 Route::get('/admin/account_admin/index', [AdminAccountController::class, 'index'])->name(('admin.account_admin.index'));
 Route::get('/admin/account_admin/create', [AdminAccountController::class, 'create'])->name('admin.account_admin.create');
 Route::delete('/admin/account_admin/{admin}', [AdminAccountController::class, 'destroy'])->name('admin.account_admin.destroy');
@@ -102,9 +103,6 @@ Route::patch('/admin/bookings/{booking}/status', [BookingController::class, 'upd
 Route::patch('/admin/bookings/{booking}/confirm', [BookingController::class, 'confirm'])->name('admin.bookings.confirm');
 Route::patch('/admin/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('admin.bookings.cancel');
 
-
-
-
 // Router Hotel
 Route::get('/admin/hotels', [HotelController::class, 'index'])->name('admin.hotels.index');
 Route::get('/admin/hotels/create', [HotelController::class, 'create'])->name('admin.hotels.create');
@@ -123,6 +121,7 @@ Route::delete('/admin/sliders/{slider}', [SliderController::class, 'destroy'])->
 
 // Route Review
 Route::get('/admin/reviews/{tourID}', [ReviewController::class, 'showReview'])->name('admin.reviews.index');
+Route::delete('admin/review/{id}', [ReviewController::class, 'destroy'])->name('admin.review.destroy');
 
 // Route trên trang user
 

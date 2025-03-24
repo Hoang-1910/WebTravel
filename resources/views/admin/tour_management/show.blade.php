@@ -54,7 +54,7 @@
             
         </div>
         <div class="card-footer">
-            <a href="{{ route('admin.tour_management.index') }}" class="btn btn-secondary">Quay lại</a>
+            <a href="{{ route('admin.tour_management.index') }}" class="btn btn-secondary mt-0">Quay lại</a>
             <a href="{{ route('admin.tour_management.edit', $tour->id) }}" class="btn btn-warning">Chỉnh sửa</a>
             <a href="{{ route('admin.schedules.index', $tour->id) }}" class="btn btn-primary">Xem lịch trình</a>
             <a href="{{ route('admin.reviews.index', $tour->id) }}" class="btn btn-primary">Xem đánh giá</a>

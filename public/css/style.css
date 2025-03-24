@@ -15,7 +15,9 @@ a {
     text-overflow: ellipsis; /* Hiển thị dấu ... */
     max-width: 700px !important;
 }
-
+.pagination {
+    padding-left: 20px !important;
+}
 
 /* Tùy chỉnh dropdown */
 .dropdown {

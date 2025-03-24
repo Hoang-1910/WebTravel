@@ -35,36 +35,54 @@ class AdminAuthController extends Controller
     }
 
     // Hiển thị thống kê cho dashboard admin
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        // Thống kê số tour đã đặt theo từng tháng (Đảm bảo đủ 12 tháng)
+        $selectedMonth = $request->input('month', now()->format('Y-m')); // Mặc định là tháng hiện tại
+
+        // Thống kê số tour đã đặt theo từng tháng trong năm
         $bookingsByMonth = Booking::selectRaw('MONTH(departure_date) as month, COUNT(*) as total')
+            ->whereYear('departure_date', now()->year)
             ->groupBy('month')
             ->orderBy('month')
             ->pluck('total', 'month')
             ->toArray();
-    
-        // Thêm các tháng bị thiếu vào mảng
+
         $bookingsByMonth = $this->fillMissingMonths($bookingsByMonth);
-    
-        // Thống kê doanh số theo tháng (VNĐ)
+
+        // Thống kê doanh số theo tháng
         $revenueByMonth = Booking::selectRaw('MONTH(departure_date) as month, SUM(total_price) as revenue')
+            ->whereYear('departure_date', now()->year)
             ->groupBy('month')
             ->orderBy('month')
             ->pluck('revenue', 'month')
             ->toArray();
-    
-        // Thêm các tháng bị thiếu vào mảng
+
         $revenueByMonth = $this->fillMissingMonths($revenueByMonth);
-    
-        // Lấy top 5 tour được đặt nhiều nhất
-        $topTours = Tour::withCount('bookings')
-            ->orderByDesc('bookings_count')
+
+        // Lấy top 5 tour được đặt nhiều nhất theo tháng đã chọn
+        $monthCarbon = \Carbon\Carbon::parse($selectedMonth);
+        $topTours = Booking::selectRaw('tour_id, COUNT(*) as total')
+            ->whereMonth('departure_date', $monthCarbon->month)
+            ->whereYear('departure_date', $monthCarbon->year)
+            // ->where('status', 'confirmed')
+            ->groupBy('tour_id')
+            ->orderByDesc('total')
+            ->with('tour')
             ->limit(5)
-            ->get(['id', 'name', 'bookings_count']);
-    
-        return view('admin.dashboard', compact('bookingsByMonth', 'revenueByMonth', 'topTours'));
+            ->get();
+
+        $topTourNames = $topTours->pluck('tour.name')->toArray();
+        $topTourBookings = $topTours->pluck('total')->toArray();
+
+        return view('admin.dashboard', compact(
+            'bookingsByMonth',
+            'revenueByMonth',
+            'topTourNames',
+            'topTourBookings',
+            'selectedMonth'
+        ));
     }
+
     
 
 /**

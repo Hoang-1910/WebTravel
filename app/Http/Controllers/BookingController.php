@@ -11,11 +11,19 @@ use Illuminate\Support\Facades\Auth;
 class BookingController extends Controller
 {
      // Hiển thị danh sách đặt tour
-     public function index()
+     public function index(Request $request)
      {
-         $bookings = Booking::with('user', 'tour')->orderBy('booking_date', 'desc')->get();
+         $query = Booking::with('user', 'tour')->orderBy('booking_date', 'desc');
+     
+         if ($request->status) {
+             $query->where('status', $request->status);
+         }
+     
+         $bookings = $query->paginate(10);
+     
          return view('admin.bookings.index', compact('bookings'));
      }
+     
  
      // Hiển thị form đặt tour cho một tour cụ thể
      public function showBookingForm($tourId)
@@ -34,7 +42,6 @@ class BookingController extends Controller
     }
 
     $request->validate([
-        'departure_location' => 'required|string|max:255',
         'departure_date' => 'required|date|after_or_equal:today',
         'num_people' => 'required|integer|min:1|max:' . $tour->max_people, // Kiểm tra max_people
     ]);
@@ -44,7 +51,6 @@ class BookingController extends Controller
     Booking::create([
         'user_id' => Auth::id(),
         'tour_id' => $tour->id,
-        'departure_location' => $request->departure_location,
         'departure_date' => $request->departure_date,
         'num_people' => $request->num_people,
         'total_price' => $total_price,

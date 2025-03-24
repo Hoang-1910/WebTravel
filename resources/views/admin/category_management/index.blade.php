@@ -2,10 +2,10 @@
 
 @section('content_admin')
 <div class="container mt-4">
-    <h2>Danh Sách Danh Mục</h2>
-
-    <a href="{{ route('admin.categories.create') }}" class="btn btn-primary mb-3">Thêm Danh Mục Mới</a>
-
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Danh Sách Danh Mục</h2>
+        <a href="{{ route('admin.categories.create') }}" class="btn btn-primary mb-3"><i class="fa-solid fa-plus pe-2"></i>Thêm Danh Mục Mới</a>
+    </div>
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -26,7 +26,7 @@
                     <td>{{ $category->name }}</td>
                     <td>{{ $category->description }}</td>
                     <td>
-                        <a href="{{ route('admin.categories.show', ['category' => $category->id]) }}" class="btn btn-primary">Xem chi tiết</a>
+                        <a href="{{ route('admin.categories.show', ['category' => $category->id]) }}" class="btn btn-secondary mt-0">Xem chi tiết</a>
                         <a href="{{ route('admin.categories.edit', ['category' => $category->id]) }}" class="btn btn-warning">Sửa</a>
                         <form action="{{ route('admin.categories.destroy', ['category' => $category->id]) }}" method="POST" class="d-inline">
                             @csrf

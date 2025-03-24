@@ -2,9 +2,16 @@
 
 @section('content_admin')
 <div class="container mt-4">
-    <h2>Danh sách người dùng</h2>
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Danh sách người dùng</h2>
+         <!-- Form tìm kiếm -->
+        <form action="{{ route('admin.account_user.index') }}" method="GET" class="position-relative mb-3" style="width: 350px">
+            <input type="text" name="search" class="form-control me-2" placeholder="Tìm theo tên hoặc email" value="{{ request('search') }}">
+            <button type="submit" class="btn position-absolute h-100" style="right: 0; top:0"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
+    </div>
     
-    <table class="table table-bordered">
+    <table class="table table-bordered text-center">
         <thead>
             <tr>
                 <th>#</th>
@@ -22,13 +29,11 @@
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->role ?? 'Người dùng' }}</td>
                 <td>
-                    <a class="btn btn-info btn-sm">Xem</a>
-                    <a  class="btn btn-warning btn-sm">Sửa</a>
-                    {{-- <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display:inline;">
+                    <form action="{{ route('admin.account_user.destroy', $user->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</button>
-                    </form> --}}
+                    </form>
                 </td>
             </tr>
             @endforeach
@@ -36,8 +41,8 @@
     </table>
 
     <!-- Phân trang -->
-    <div class="d-flex justify-content-center">
-        {{ $users->links() }}
+    <div class="d-flex justify-content-center mt-4">
+        {{ $users->withQueryString()->links('pagination::bootstrap-5') }}
     </div>
 </div>
 @endsection

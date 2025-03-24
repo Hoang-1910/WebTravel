@@ -1,13 +1,19 @@
 @extends('admin.layout')
 
 @section('content_admin')
-    <div class="row">
-        <div class="col-6">
+    <div class="row mb-4">
+        <div class="col-4" style="width:52% !important;">
             <h2>Danh sách Tour</h2>
         </div>
-        <div class="col-6" style="text-align: end">
-            <a href="{{ route('admin.tour_management.create') }}" class="btn btn-primary">
-                <i class="fa-solid fa-plus"></i>
+        
+        <form action="{{ route('admin.tour_management.index') }}" method="GET" class="position-relative col-4">
+            <input type="text" name="search" class="form-control me-2" placeholder="Tìm kiếm tour theo tên..." value="{{ $search ?? '' }}">
+            <button type="submit" class="btn position-absolute h-100" style="right: 10px; top:0"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
+
+        <div class="col-3" style="width:14% !important;">
+            <a href="{{ route('admin.tour_management.create') }}" class="btn btn-primary h-100 d-flex align-items-center">
+                <i class="fa-solid fa-plus pe-2"></i>
                 Thêm Tour
             </a>
         </div>
@@ -49,6 +55,10 @@
             @endforeach
         </tbody>
     </table>
+    <div class="d-flex justify-content-center mt-4">
+        {{ $tours->withQueryString()->links('pagination::bootstrap-5') }}
+    </div>
+    
 
 
     <!-- Modal Xác Nhận Xóa -->
@@ -86,5 +96,6 @@
             });
         });
     </script>
-    
 @endsection
+
+

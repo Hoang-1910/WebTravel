@@ -16,6 +16,11 @@ class AdminAccountController extends Controller
     public function create(){
         return view('admin.account_admin.create');
     }
+    public function showInfo()
+    {
+        $admin = session('admin');
+        return view('admin.account_admin.info', compact('admin'));
+    }
 
     public function store(Request $request)
     {

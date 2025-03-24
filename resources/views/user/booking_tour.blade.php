@@ -25,11 +25,6 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Điểm xuất phát *</label>
-                    <input type="text" name="departure_location" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
                     <label class="form-label">Ngày xuất phát *</label>
                     <input type="date" name="departure_date" class="form-control" required>
                 </div>
