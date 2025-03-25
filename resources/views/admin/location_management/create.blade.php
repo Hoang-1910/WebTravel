@@ -4,16 +4,6 @@
 <div class="container mt-4">
     <h2>Thêm Địa Điểm Mới</h2>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <form action="{{ route('admin.locations.store') }}" method="POST">
         @csrf
         <div class="mb-3">

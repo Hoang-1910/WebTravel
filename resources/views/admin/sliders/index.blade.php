@@ -7,9 +7,9 @@
         <a href="{{ route('admin.sliders.create') }}" class="btn btn-primary">Thêm slider mới</a>
     </div>
 
-    @if(session('success'))
+    {{-- @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    @endif --}}
 
     <table class="table table-bordered table-striped" style="border-radius: 10px; overflow: hidden;">
         <thead>
@@ -27,10 +27,13 @@
                     <td class="text-center"><img src="{{ asset('storage/' . $slider->image) }}" alt="slider" width="120"></td>
                     <td>{{ $slider->title }}</td>
                     <td>{{ $slider->subtitle }}</td>
-                    <td>
-                        <span class="badge {{ $slider->is_active ? 'bg-success' : 'bg-secondary' }}">
-                            {{ $slider->is_active ? 'Đang sử dụng' : 'Không sử dụng' }}
-                        </span>
+                    <td class="text-center">
+                        <form action="{{ route('admin.sliders.toggle', $slider->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn {{ $slider->is_active ? 'btn-success' : 'btn-secondary' }} btn-sm">
+                                {{ $slider->is_active ? 'Đang sử dụng' : 'Không sử dụng' }}
+                            </button>
+                        </form>
                     </td>
                     <td>
                         <a href="{{ route('admin.sliders.edit', $slider->id) }}" class="btn btn-warning btn-sm">Sửa</a>

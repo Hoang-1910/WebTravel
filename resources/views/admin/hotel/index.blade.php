@@ -7,10 +7,6 @@
             <a href="{{ route('admin.hotels.create') }}" class="btn btn-primary mb-3"><i class="fa-solid fa-plus pe-2"></i>Thêm Khách Sạn Mới</a>
         </div>
     
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-    
         <table class="table table-bordered text-center">
             <thead>
                 <tr>
@@ -25,7 +21,7 @@
                 @foreach ($hotels as $index => $hotel)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td class="text-start">{{ $hotel->name }}</td>
+                        <td>{{ $hotel->name }}</td>
                         <td>{{ $hotel->location->name }}</td>
                         <td>
                             @for ($i = 1; $i <= 5; $i++)

@@ -160,16 +160,25 @@ class TourController extends Controller
 
     public function destroy(Tour $tour)
     {
-        // Xóa ảnh chính
-        Storage::disk('public')->delete($tour->image);
-        // Xóa ảnh phụ
-        foreach ($tour->images as $image) {
-            Storage::disk('public')->delete($image->image);
-            $image->delete();
+        // Xóa ảnh chính (nếu có)
+        if ($tour->image && Storage::disk('public')->exists($tour->image)) {
+            Storage::disk('public')->delete($tour->image);
         }
+
+        // Xóa ảnh phụ (nếu có)
+        foreach ($tour->images as $image) {
+            if (Storage::disk('public')->exists($image->image)) {
+                Storage::disk('public')->delete($image->image);
+            }
+            $image->delete(); // Xóa record trong database
+        }
+
+        // Xóa tour
         $tour->delete();
-        return redirect()->route('admin.tour_management.index')->with('success', 'Tour deleted successfully!');
+
+        return redirect()->route('admin.tour_management.index')->with('success', 'Tour đã được xóa thành công!');
     }
+
 
     public function search(Request $request)
 {

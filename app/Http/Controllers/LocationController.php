@@ -21,6 +21,12 @@ class LocationController extends Controller
         return view('admin.location_management.create');
     }
 
+    public function edit(Location $location)
+    {
+        return view('admin.location_management.edit', compact('location'));
+    }
+
+
     // Xử lý lưu địa điểm vào database
     public function store(Request $request)
     {
@@ -37,6 +43,27 @@ class LocationController extends Controller
         return redirect()->route('admin.locations.index')->with('success', 'Địa điểm đã được tạo thành công!');
     }
 
+    public function update(Request $request, Location $location)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:locations,name,' . $location->id,
+            'description' => 'nullable|string',
+        ]);
+
+        $location->update([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('admin.locations.index')->with('success', 'Địa điểm đã được cập nhật thành công!');
+    }
+
+    public function destroy(Location $location)
+    {
+        $location->delete();
+        return redirect()->route('admin.locations.index')->with('success', 'Địa điểm đã được xóa thành công!');
+    }
+    
     public function getLocations()
     {
         $locations = Location::all(); // Lấy tất cả dữ liệu từ bảng locations

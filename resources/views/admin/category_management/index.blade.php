@@ -6,9 +6,9 @@
         <h2>Danh Sách Danh Mục</h2>
         <a href="{{ route('admin.categories.create') }}" class="btn btn-primary mb-3"><i class="fa-solid fa-plus pe-2"></i>Thêm Danh Mục Mới</a>
     </div>
-    @if (session('success'))
+    {{-- @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    @endif --}}
 
     <table class="table table-bordered">
         <thead>

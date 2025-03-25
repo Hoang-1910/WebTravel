@@ -79,4 +79,15 @@ class SliderController extends Controller
         $slider->delete();
         return redirect()->route('admin.sliders.index')->with('success', 'Xóa slider thành công!');
     }
+
+    public function toggleStatus($id)
+    {
+        $slider = Slider::findOrFail($id);
+        $slider->is_active = !$slider->is_active;
+        $slider->save();
+
+        return redirect()->back()->with('success', 'Cập nhật trạng thái slider thành công.');
+    }
+
 }
+

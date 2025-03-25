@@ -10,9 +10,9 @@
             <a href="{{ route('admin.locations.create') }}" class="btn btn-primary mb-3">Thêm Địa Điểm Mới</a>
         </div>
     </div>
-    @if (session('success'))
+    {{-- @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    @endif --}}
 
     <table class="table table-bordered text-center">
         <thead>
@@ -32,7 +32,7 @@
                     <td>
                         <a href="" class="btn btn-info">Xem</a>
                         <a href="" class="btn btn-warning">Sửa</a>
-                        <form action="" method="POST" style="display:inline-block;">
+                        <form action="{{ route('admin.locations.destroy', $location->id) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</button>

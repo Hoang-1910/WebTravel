@@ -69,6 +69,9 @@ Route::delete('/admin/categories/{category}', [CategoryController::class, 'destr
 
 Route::get('/admin/locations', [LocationController::class, 'index'])->name('admin.locations.index'); // Danh sách địa điểm
 Route::get('/admin/locations/create', [LocationController::class, 'create'])->name('admin.locations.create'); // Form thêm địa điểm
+Route::get('/admin/locations/{location}/edit', [LocationController::class, 'edit'])->name('admin.locations.edit'); // Form sửa địa điểm
+Route::put('/admin/locations/{location}', [LocationController::class, 'update'])->name('admin.locations.update'); // Xử lý sửa địa điểm
+Route::delete('/admin/locations/{location}', [LocationController::class, 'destroy'])->name('admin.locations.destroy'); // Xử lý xóa địa điểm
 Route::post('/admin/locations', [LocationController::class, 'store'])->name('admin.locations.store'); // Xử lý lưu địa điểm
 
 //Route Account Amin
@@ -118,6 +121,7 @@ Route::post('/admin/sliders', [SliderController::class, 'store'])->name('admin.s
 Route::get('/admin/sliders/{slider}/edit', [SliderController::class, 'edit'])->name('admin.sliders.edit');
 Route::put('/admin/sliders/{slider}', [SliderController::class, 'update'])->name('admin.sliders.update');
 Route::delete('/admin/sliders/{slider}', [SliderController::class, 'destroy'])->name('admin.sliders.destroy');
+Route::post('/admin/sliders/{id}/toggle', [SliderController::class, 'toggleStatus'])->name('admin.sliders.toggle');
 
 // Route Review
 Route::get('/admin/reviews/{tourID}', [ReviewController::class, 'showReview'])->name('admin.reviews.index');

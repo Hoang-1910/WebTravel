@@ -99,30 +99,55 @@ class UserController extends Controller
         return redirect()->back()->with('error', 'Thông tin đăng nhập không chính xác.');
     }
     
-
     public function register(Request $request)
     {
-        // Xác thực dữ liệu đầu vào
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'required|string|max:15',
-            'password' => 'required|min:6|confirmed', // 'password_confirmation' phải khớp
+            'email' => 'required|email|max:255',
+            'password' => 'required|string|min:6|confirmed',
         ]);
-
-        // Tạo người dùng mới
-        $user = User::create([
+    
+        // Kiểm tra trùng email thủ công
+        if (User::where('email', $request->email)->exists()) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['email' => 'Email này đã được đăng ký!']);
+        }
+    
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
+            'password' => bcrypt($request->password),
         ]);
-
-        // Đăng nhập ngay sau khi đăng ký
-        session(['user' => $user]);
-
-        return redirect()->route('user.homepage')->with('success', 'Đăng ký thành công!');
+    
+        return redirect()->route('login')->with('success', 'Đăng ký thành công!');
     }
+    
+    
+
+    // public function register(Request $request)
+    // {
+    //     // Xác thực dữ liệu đầu vào
+    //     $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'email' => 'required|email|unique:users,email',
+    //         'phone' => 'required|string|max:15',
+    //         'password' => 'required|min:6|confirmed', // 'password_confirmation' phải khớp
+    //     ]);
+
+    //     // Tạo người dùng mới
+    //     $user = User::create([
+    //         'name' => $request->name,
+    //         'email' => $request->email,
+    //         'phone' => $request->phone,
+    //         'password' => Hash::make($request->password),
+    //     ]);
+
+    //     // Đăng nhập ngay sau khi đăng ký
+    //     session(['user' => $user]);
+
+    //     return redirect()->route('user.homepage')->with('success', 'Đăng ký thành công!');
+    // }
 
     public function forgotPassword(Request $request)
     {

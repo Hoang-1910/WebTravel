@@ -18,9 +18,9 @@
             </a>
         </div>
     </div>
-    @if(session('success'))
+    {{-- @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    @endif --}}
 
     <table class="table">
         <thead>

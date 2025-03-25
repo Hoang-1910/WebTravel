@@ -46,7 +46,7 @@ class HotelController extends Controller
 
         $hotel->update($request->all());
 
-        return redirect()->route('hotels.index')
+        return redirect()->route('admin.hotels.index')
             ->with('success', 'Hotel updated successfully');
     }
 
