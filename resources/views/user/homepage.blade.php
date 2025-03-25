@@ -132,22 +132,22 @@
                         <!-- Tour Card 1 -->
                         @foreach($category->tours->shuffle()->take(4) as $tour)       
                         <div class="tour-card">
-                                <div class="tour-thumb">
-                                    <img src="{{ asset('storage/' . $tour->image) }}" alt="{{ $tour->name }}">
-                                    <div class="tour-price">
-                                        <p class="mb-0"><strong>Giá:</strong> {{ number_format($tour->price, 0, ',', '.') }} VND</p>
-                                    </div>
-                                </div>
-                                <div class="tour-content">
-                                    <h3>{{ $tour->name }}</h3>
-                                    <div class="tour-info">
-                                        <span style="white-space:nowrap"><i class="far fa-clock"></i>{{ $tour->duration }} ngày</span>
-                                        <span style="white-space:nowrap"><i class="fas fa-map-marker-alt"></i>{{ $tour->departureLocation->name ?? 'Null' }}</span>
-                                        <span style="white-space:nowrap"><i class="fa-solid fa-plane-departure"></i>{{ $tour->location ? $tour->location->name : 'Không xác định'  }}</span>
-                                    </div>
-                                    <a href="{{ route('user.detail_tour',  ['id' => $tour->id]) }}" class="btn-secondary">Xem chi tiết</a>
+                            <div class="tour-thumb">
+                                <img src="{{ asset('storage/' . $tour->image) }}" alt="{{ $tour->name }}">
+                                <div class="tour-price">
+                                    <p class="mb-0"><strong>Giá:</strong> {{ number_format($tour->price, 0, ',', '.') }} VND</p>
                                 </div>
                             </div>
+                            <div class="tour-content">
+                                <h3>{{ $tour->name }}</h3>
+                                <div class="tour-info">
+                                    <span style="white-space:nowrap"><i class="far fa-clock"></i>{{ $tour->duration }} ngày</span>
+                                    <span style="white-space:nowrap"><i class="fas fa-map-marker-alt"></i>{{ $tour->departureLocation->name ?? 'Null' }}</span>
+                                    <span style="white-space:nowrap"><i class="fa-solid fa-plane-departure"></i>{{ $tour->location ? $tour->location->name : 'Không xác định'  }}</span>
+                                </div>
+                                <a href="{{ route('user.detail_tour',  ['id' => $tour->id]) }}" class="btn-secondary">Xem chi tiết</a>
+                            </div>
+                        </div>
                         @endforeach
                     </div>
                 </div>

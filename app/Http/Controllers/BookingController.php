@@ -93,7 +93,7 @@ public function cancel(Booking $booking)
 {
     $booking->update(['status' => 'cancelled']);
 
-    return redirect()->route('admin.bookings.index')->with('success', 'Đã xác nhận đặt tour!');
+    return redirect()->route('admin.bookings.index')->with('success', 'Đã xác nhận hủy tour!');
 }
 
  

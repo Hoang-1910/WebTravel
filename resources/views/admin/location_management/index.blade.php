@@ -31,7 +31,7 @@
                     <td>{{ $location->description }}</td>
                     <td>
                         <a href="" class="btn btn-info">Xem</a>
-                        <a href="" class="btn btn-warning">Sửa</a>
+                        <a href="{{ route('admin.locations.edit', $location->id) }}" class="btn btn-warning">Sửa</a>
                         <form action="{{ route('admin.locations.destroy', $location->id) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')

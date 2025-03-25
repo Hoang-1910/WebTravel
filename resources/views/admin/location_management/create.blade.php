@@ -17,7 +17,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Thêm Địa Điểm</button>
-        <a href="{{ route('admin.locations.index') }}" class="btn btn-secondary">Quay lại</a>
+        <a href="{{ route('admin.locations.index') }}" class="btn btn-secondary mt-0">Quay lại</a>
     </form>
 </div>
 @endsection

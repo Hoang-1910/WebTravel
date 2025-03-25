@@ -33,7 +33,9 @@
                     <label class="form-label">Số khách *</label>
                     <input type="number" name="num_people" class="form-control" min="1" max="{{ $tour->max_people }}" required>
                 </div>
-
+                <div class="mb-3">
+                    <p><strong>Tổng tiền:</strong> <span id="total_price">0</span></p>
+                </div>
                 <button type="submit" class="btn btn-primary">Xác nhận đặt tour</button>
             </form>
         </div>
@@ -47,7 +49,7 @@
                     <p><strong>Giá 1 khách:</strong> {{ number_format($tour->price, 0, ',', '.') }} VND</p>
                     <p><strong>Thời gian:</strong> {{ $tour->duration }} ngày</p>
                     <p><strong>Mô tả:</strong> {{ $tour->description }}</p>
-                    <p><strong>Tổng tiền:</strong> <span id="total_price">0</span></p>
+                    
                 </div>
             </div>
         </div>

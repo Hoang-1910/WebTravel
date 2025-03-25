@@ -26,7 +26,7 @@
                 <textarea name="description" class="form-control">{{ $category->description }}</textarea>
             </div>
             <button type="submit" class="btn btn-success">Cập Nhật Danh Mục</button>
-            <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Quay lại</a>
+            <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary mt-0">Quay lại</a>
         </form>
     </div>
 @endsection
