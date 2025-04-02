@@ -1,7 +1,7 @@
-#Xây dựng website tour du lịch
+# Xây dựng website tour du lịch
 - Công nghệ sử dụng: PHP và Laravel Framework
 
-#Thành viên:
+# Thành viên:
 - Nguyễn Bảo Hoàng (Nhóm trưởng)
 - Nguyễn Ngọc Miền
 
