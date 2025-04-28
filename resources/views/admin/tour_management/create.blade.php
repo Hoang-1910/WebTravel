@@ -15,14 +15,16 @@
             <textarea class="form-control" name="description"></textarea>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Giá</label>
-            <input type="number" class="form-control" name="price" required>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Số Ngày</label>
-            <input type="number" class="form-control" name="duration" required>
+        <div class="row mb-3">
+            <div class="col-6">
+                <label class="form-label">Giá</label>
+                <input type="number" class="form-control" name="price" required>
+            </div>
+    
+            <div class="col-6">
+                <label class="form-label">Số Ngày</label>
+                <input type="number" class="form-control" name="duration" required>
+            </div>
         </div>
 
         <div class="mb-3">
@@ -34,35 +36,38 @@
             </select>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Địa Điểm</label>
-            <select class="form-control" name="location_id" required>
-                @foreach($locations as $location)
-                    <option value="{{ $location->id }}">{{ $location->name }}</option>
-                @endforeach
-            </select>
+        <div class="row mb-3">
+            <div class="col-4">
+                <label class="form-label">Địa Điểm</label>
+                <select class="form-control" name="location_id" required>
+                    @foreach($locations as $location)
+                        <option value="{{ $location->id }}">{{ $location->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-4">
+                <label class="form-label">Điểm xuất phát</label>
+                <select class="form-control" name="departure_location" required>
+                    @foreach($locations as $location)
+                        <option value="{{ $location->id }}">{{ $location->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-4">
+                <label for="max_people" class="form-label">Số người tối đa:</label>
+                <input type="number" name="max_people" class="form-control" value="{{ old('max_people', $tour->max_people ?? '') }}" min="1">
+            </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Điểm xuất phát</label>
-            <select class="form-control" name="departure_location" required>
-                @foreach($locations as $location)
-                    <option value="{{ $location->id }}">{{ $location->name }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="max_people" class="form-label">Số người tối đa:</label>
-            <input type="number" name="max_people" class="form-control" value="{{ old('max_people', $tour->max_people ?? '') }}" min="1">
-        </div>
+        
 
         <div class="mb-3">
             <label class="form-label">Hình Ảnh Đại Diện</label>
-            <input type="file" class="form-control" name="image">
+            <input type="file" class="form-control" name="image" style="line-height: 35px !important;">
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Hình Ảnh</label>
-            <input type="file" class="form-control" name="images[]" multiple>
+            <label class="form-label">Hình Ảnh Phụ</label>
+            <input type="file" class="form-control" name="images[]" multiple style="line-height: 35px !important;">
         </div>
 
         <div class="mb-3">

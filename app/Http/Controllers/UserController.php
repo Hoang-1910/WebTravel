@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Mail\AccountCreatedMail;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -98,7 +100,7 @@ class UserController extends Controller
     
         return redirect()->back()->with('error', 'Thông tin đăng nhập không chính xác.');
     }
-    
+
     public function register(Request $request)
     {
         $request->validate([
@@ -106,48 +108,29 @@ class UserController extends Controller
             'email' => 'required|email|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
-    
-        // Kiểm tra trùng email thủ công
+
+        // Kiểm tra trước khi tạo mới
         if (User::where('email', $request->email)->exists()) {
             return redirect()->back()
                 ->withInput()
                 ->withErrors(['email' => 'Email này đã được đăng ký!']);
         }
-    
-        User::create([
+
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-    
-        return redirect()->route('login')->with('success', 'Đăng ký thành công!');
+
+        // Gửi email thông báo (nhưng không cần xác nhận)
+        Mail::to($user->email)->send(new AccountCreatedMail($user));
+
+        return redirect()->route('login')->with('success', 'Đăng ký thành công! Email thông báo đã được gửi.');
     }
-    
-    
 
-    // public function register(Request $request)
-    // {
-    //     // Xác thực dữ liệu đầu vào
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|email|unique:users,email',
-    //         'phone' => 'required|string|max:15',
-    //         'password' => 'required|min:6|confirmed', // 'password_confirmation' phải khớp
-    //     ]);
 
-    //     // Tạo người dùng mới
-    //     $user = User::create([
-    //         'name' => $request->name,
-    //         'email' => $request->email,
-    //         'phone' => $request->phone,
-    //         'password' => Hash::make($request->password),
-    //     ]);
 
-    //     // Đăng nhập ngay sau khi đăng ký
-    //     session(['user' => $user]);
 
-    //     return redirect()->route('user.homepage')->with('success', 'Đăng ký thành công!');
-    // }
 
     public function forgotPassword(Request $request)
     {

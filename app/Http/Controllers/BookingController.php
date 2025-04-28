@@ -12,17 +12,22 @@ class BookingController extends Controller
 {
      // Hiển thị danh sách đặt tour
      public function index(Request $request)
-     {
-         $query = Booking::with('user', 'tour')->orderBy('booking_date', 'desc');
-     
-         if ($request->status) {
-             $query->where('status', $request->status);
-         }
-     
-         $bookings = $query->paginate(10);
-     
-         return view('admin.bookings.index', compact('bookings'));
-     }
+{
+    $query = Booking::with('user', 'tour');
+
+    if ($request->status) {
+        $query->where('status', $request->status);
+    }
+
+    // Mặc định sắp xếp theo ngày đặt giảm dần, hoặc theo yêu cầu
+    $sortOrder = $request->sort ?? 'desc';
+    $query->orderBy('booking_date', $sortOrder);
+
+    $bookings = $query->paginate(10)->withQueryString();
+
+    return view('admin.bookings.index', compact('bookings'));
+}
+
      
  
      // Hiển thị form đặt tour cho một tour cụ thể

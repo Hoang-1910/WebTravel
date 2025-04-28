@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\Location;
 use App\Models\Slider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Schema;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,9 +26,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        $categories = Category::all();
-        $locations = Location::all();
-        $sliders = Slider::where('is_active', 1)->orderBy('id', 'desc')->get();
-        View::share(compact('categories', 'locations','sliders'));
+        if (Schema::hasTable('categories') && Schema::hasTable('locations') && Schema::hasTable('sliders')) {
+            $categories = Category::all();
+            $locations = Location::all();
+            $sliders = Slider::where('is_active', 1)->orderBy('id', 'desc')->get();
+            View::share(compact('categories', 'locations', 'sliders'));
+        }
     }
 }

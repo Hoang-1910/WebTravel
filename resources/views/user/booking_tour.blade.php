@@ -70,42 +70,42 @@
             });
         }
     });
-document.addEventListener("DOMContentLoaded", function () {
-    // Lấy các phần tử input
-    let numPeopleInput = document.querySelector("input[name='num_people']");
-    let departureDateInput = document.querySelector("input[name='departure_date']");
-    let totalPriceElement = document.getElementById("total_price");
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy các phần tử input
+        let numPeopleInput = document.querySelector("input[name='num_people']");
+        let departureDateInput = document.querySelector("input[name='departure_date']");
+        let totalPriceElement = document.getElementById("total_price");
 
-    // Giá mỗi người và số khách tối đa
-    let pricePerPerson = {{ $tour->price }};
-    let maxPeople = {{ $tour->max_people }};
+        // Giá mỗi người và số khách tối đa
+        let pricePerPerson = {{ $tour->price }};
+        let maxPeople = {{ $tour->max_people }};
 
-    // Đặt giá trị min cho ngày xuất phát (không cho chọn ngày quá khứ)
-    let today = new Date().toISOString().split("T")[0];
-    departureDateInput.setAttribute("min", today);
+        // Đặt giá trị min cho ngày xuất phát (không cho chọn ngày quá khứ)
+        let today = new Date().toISOString().split("T")[0];
+        departureDateInput.setAttribute("min", today);
 
-    // Kiểm tra số khách nhập vào
-    numPeopleInput.addEventListener("input", function () {
-        let numPeople = parseInt(this.value) || 0;
+        // Kiểm tra số khách nhập vào
+        numPeopleInput.addEventListener("input", function () {
+            let numPeople = parseInt(this.value) || 0;
 
-        if (numPeople > maxPeople) {
-            Swal.fire({
-                icon: "warning",
-                title: "Quá số khách cho phép!",
-                text: "Số khách tối đa là " + maxPeople + " người.",
-                confirmButtonText: "OK",
-                timer: 3000,
-                timerProgressBar: true
-            });
+            if (numPeople > maxPeople) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Quá số khách cho phép!",
+                    text: "Số khách tối đa là " + maxPeople + " người.",
+                    confirmButtonText: "OK",
+                    timer: 3000,
+                    timerProgressBar: true
+                });
 
-            this.value = maxPeople;
-            numPeople = maxPeople;
-        }
+                this.value = maxPeople;
+                numPeople = maxPeople;
+            }
 
-        // Cập nhật tổng giá
-        totalPriceElement.innerText = (numPeople * pricePerPerson).toLocaleString() + " VND";
+            // Cập nhật tổng giá
+            totalPriceElement.innerText = (numPeople * pricePerPerson).toLocaleString() + " VND";
+        });
     });
-});
 </script>
 
 

@@ -182,7 +182,7 @@
         Swal.fire({
             icon: "warning",
             title: "Đăng nhập để sử dụng chức năng này!",
-            text: "Bạn cần đăng nhập để đặt tour hoặc gửi đánh giá.",
+            text: "Bạn cần đăng nhập để sử dụng chức năng này.",
             confirmButtonText: "OK",
             confirmButtonColor: "#3085d6"
         });
